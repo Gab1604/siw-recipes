@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{base :: head}"></head>
+<body>
+<header th:replace="~{base :: header}"></header>
+
+<main class="content">
+  <h2>Gestione Utenti</h2>
+
+  <div th:if="${#lists.isEmpty(users)}">
+    <p>Nessun utente registrato.</p>
+  </div>
+
+  <table class="table" th:if="${!#lists.isEmpty(users)}">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Nome</th>
+        <th>Cognome</th>
+        <th>Ruoli</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="user : ${users}">
+        <td th:text="${user.id}">1</td>
+        <td th:text="${user.username}">utente</td>
+        <td th:text="${user.firstName}">Mario</td>
+        <td th:text="${user.lastName}">Rossi</td>
+        <td>
+          <span th:each="role : ${user.roles}"
+                th:text="${role}"
+                class="tag role-tag">ROLE_USER</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <a th:href="@{/admin}" class="btn">Torna alla Dashboard</a>
+</main>
+
+<footer th:replace="~{base :: footer}"></footer>
+</body>
+</html>

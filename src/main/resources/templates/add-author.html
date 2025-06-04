@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="it"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
+<head th:replace="~{base :: head}"></head>
+<body>
+<header th:replace="~{base :: header}"></header>
+
+<main class="content">
+  <h1>Nuovo Autore</h1>
+
+  <!-- Errori di binding -->
+  <div th:if="${#fields.hasErrors('*')}" class="message error">
+    Ci sono errori nei campi evidenziati. Controlla e riprova.
+  </div>
+
+  <form th:action="@{/authors/add}"
+        th:object="${author}"
+        method="post"
+        sec:authorize="hasRole('ADMIN')">
+
+    <div class="form-group">
+      <label for="firstName">Nome</label>
+      <input id="firstName" type="text" th:field="*{firstName}" placeholder="Inserisci nome" required />
+      <p class="field-error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Nome obbligatorio</p>
+    </div>
+
+    <div class="form-group">
+      <label for="lastName">Cognome</label>
+      <input id="lastName" type="text" th:field="*{lastName}" placeholder="Inserisci cognome" required />
+      <p class="field-error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Cognome obbligatorio</p>
+    </div>
+
+    <div class="form-group">
+      <label for="nationality">Nazionalità</label>
+      <input id="nationality" type="text" th:field="*{nationality}" placeholder="Es. Italiana" required />
+      <p class="field-error" th:if="${#fields.hasErrors('nationality')}" th:errors="*{nationality}">Nazionalità obbligatoria</p>
+    </div>
+
+    <div class="form-group">
+      <label for="birthDate">Data di nascita</label>
+      <input id="birthDate" type="date" th:field="*{birthDate}" required />
+      <p class="field-error" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}">Data non valida</p>
+    </div>
+
+    <div class="form-group">
+      <label for="deathDate">Data di morte (opzionale)</label>
+      <input id="deathDate" type="date" th:field="*{deathDate}" />
+    </div>
+
+    <div class="button-group">
+      <button type="submit" class="btn">Salva</button>
+      <a th:href="@{/authors}" class="btn">Annulla</a>
+    </div>
+  </form>
+</main>
+
+<footer th:replace="~{base :: footer}"></footer>
+</body>
+</html>

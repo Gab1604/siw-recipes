@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="it"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
+<head th:replace="~{base :: head}"></head>
+<body>
+<header th:replace="~{base :: header}"></header>
+
+<main class="content">
+  <h2>Lista Utenti</h2>
+
+  <!-- Messaggio se non ci sono utenti -->
+  <div th:if="${#lists.isEmpty(users)}">
+    <p>Non ci sono utenti registrati.</p>
+  </div>
+
+  <!-- Tabella utenti -->
+  <div th:if="${!#lists.isEmpty(users)}">
+    <table class="table user-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Nome</th>
+          <th>Cognome</th>
+          <th>Ruoli</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="user : ${users}">
+          <td th:text="${user.id}">1</td>
+
+          <!-- Recupera le credenziali legate a questo utente -->
+          <td th:text="${user.credentials.username}">utente</td>
+
+          <td th:text="${user.firstName}">Mario</td>
+          <td th:text="${user.lastName}">Rossi</td>
+
+          <td>
+            <span th:each="role : ${user.credentials.role.split(',')}" 
+                  th:text="${role}"
+                  class="tag role-tag">DEFAULT</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<footer th:replace="~{base :: footer}"></footer>
+</body>
+</html>

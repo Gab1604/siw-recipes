@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="it"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
+<head th:replace="~{base :: head}"></head>
+<body>
+<header th:replace="~{base :: header}"></header>
+
+<main class="content">
+  <h2>Lista Recensioni</h2>
+
+  <!-- Nessuna recensione -->
+  <div th:if="${#lists.isEmpty(reviews)}">
+    <p>Non ci sono recensioni disponibili.</p>
+  </div>
+
+  <!-- Tabella recensioni -->
+  <div th:if="${!#lists.isEmpty(reviews)}">
+    <table class="table review-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Utente</th>
+          <th>Libro</th>
+          <th>Voto</th>
+          <th>Testo</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="review : ${reviews}">
+          <td th:text="${review.id}">1</td>
+          <td th:text="${review.user.credentials.username}">utente</td>
+          <td>
+            <a th:href="@{/books/{id}(id=${review.book.id})}"
+               th:text="${review.book.title}">Titolo Libro</a>
+          </td>
+          <td th:text="${review.rating} + '/5'">5/5</td>
+          <td th:text="${review.text}">Testo recensione…</td>
+          <td th:text="${#dates.format(review.createdAt, 'dd/MM/yyyy HH:mm')}">
+            01/01/2025 12:00
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<footer th:replace="~{base :: footer}"></footer>
+</body>
+</html>

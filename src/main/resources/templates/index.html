@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="it"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
+<head th:replace="base :: head">
+    <title>Benvenuto su SiwBooks</title>
+</head>
+<body>
+    <header th:replace="base :: header"></header>
+
+    <main th:replace="base :: content">
+        <section class="homepage">
+            <h1>Benvenuto su <span class="highlight">SiwBooks</span></h1>
+            <p>Esplora il nostro catalogo, scopri autori e lascia recensioni!</p>
+
+            <div class="button-group">
+                <a th:href="@{/books}" class="btn btn-primary">Scopri i Libri</a>
+                <a th:href="@{/authors}" class="btn btn-secondary">Vedi gli Autori</a>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="base :: footer"></footer>
+</body>
+</html>

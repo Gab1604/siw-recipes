@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="it"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
+<head th:replace="base :: head"></head>
+<body>
+<header th:replace="base :: header"></header>
+
+<main class="content">
+  <header class="author-header">
+    <div class="author-info">
+      <h1 th:text="${author.firstName + ' ' + author.lastName}">Nome Autore</h1>
+      <p><strong>Nazionalità:</strong> <span th:text="${author.nationality}">Nazionalità</span></p>
+      <p><strong>Data di nascita:</strong> <span th:text="${#dates.format(author.birthDate, 'dd/MM/yyyy')}">01/01/1970</span></p>
+      <p th:if="${author.deathDate != null}">
+        <strong>Data di morte:</strong>
+        <span th:text="${#dates.format(author.deathDate, 'dd/MM/yyyy')}">01/01/2020</span>
+      </p>
+    </div>
+
+    <div class="author-actions" sec:authorize="hasAuthority('ADMIN')">
+      <a th:href="@{/authors/edit/{id}(id=${author.id})}" class="btn">Modifica</a>
+      <form th:action="@{/authors/delete/{id}(id=${author.id})}" method="post" style="display:inline">
+        <button type="submit" class="btn">Elimina</button>
+      </form>
+    </div>
+  </header>
+
+  <section class="author-books">
+    <h2>Libri di questo autore</h2>
+    <div th:if="${#lists.isEmpty(author.books)}">
+      <p>Non ci sono libri associati.</p>
+    </div>
+    <ul th:if="${!#lists.isEmpty(author.books)}" class="book-list">
+      <li th:each="book : ${author.books}">
+        <a th:href="@{/books/{id}(id=${book.id})}" th:text="${book.title}">Titolo Libro</a>
+        <span class="year" th:text="'(' + ${book.publicationYear} + ')'"> (2025)</span>
+      </li>
+    </ul>
+  </section>
+</main>
+
+<footer th:replace="base :: footer"></footer>
+</body>
+</html>

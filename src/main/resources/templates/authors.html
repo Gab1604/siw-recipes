@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="it"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
+<head th:replace="base :: head"></head>
+<body>
+<header th:replace="base :: header"></header>
+
+<main class="content">
+  <h1>Elenco Autori</h1>
+
+  <!-- Link per aggiungere un autore (solo admin) -->
+  <div class="button-group" sec:authorize="hasAuthority('ADMIN')">
+    <a th:href="@{/authors/add}" class="btn">Aggiungi Autore</a>
+  </div>
+
+  <!-- Lista autori -->
+  <ul class="author-list">
+    <li th:each="author : ${authors}" class="author-item">
+      <a th:href="@{/authors/{id}(id=${author.id})}"
+         th:text="${author.firstName + ' ' + author.lastName}">
+        Autore
+      </a>
+    </li>
+  </ul>
+</main>
+
+<footer th:replace="base :: footer"></footer>
+</body>
+</html>

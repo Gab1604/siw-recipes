@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
+<head th:replace="base :: head"></head>
+<body>
+<header th:replace="base :: header"></header>
+
+<main class="content">
+  <h1 th:text="${book.title}">Titolo Libro</h1>
+  <p><strong>Anno di pubblicazione:</strong> <span th:text="${book.publicationYear}">2025</span></p>
+
+  <!-- Copertina -->
+  <div th:if="${book.images.size() > 0}" class="cover">
+    <img th:src="@{/images/{id}(id=${book.images.get(0).id})}" alt="Copertina libro" />
+  </div>
+
+  <!-- Sinossi -->
+  <section class="synopsis">
+    <h2>Sinossi</h2>
+    <p th:text="${book.synopsis}">Testo sinossi...</p>
+  </section>
+
+  <!-- Autori -->
+  <section class="authors">
+    <h2>Autori</h2>
+    <ul>
+      <li th:each="author : ${book.authors}">
+        <a th:href="@{/authors/{id}(id=${author.id})}"
+           th:text="${author.firstName + ' ' + author.lastName}">
+          Nome Autore
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Recensioni -->
+  <section class="reviews">
+    <h2>Recensioni</h2>
+
+    <div th:if="${#lists.isEmpty(book.reviews)}">
+      <p>Non ci sono ancora recensioni per questo libro.</p>
+    </div>
+
+    <ul th:if="${!#lists.isEmpty(book.reviews)}" class="review-list">
+      <li th:each="review : ${book.reviews}" class="review-item">
+        <div class="review-header">
+          <span class="rating" th:text="${review.rating} + '/5'">5/5</span>
+          <span class="author" th:text="${review.user.credentials.username}">utente</span>
+          <span class="date" th:text="${#dates.format(review.createdAt, 'dd/MM/yyyy')}">01/01/2025</span>
+        </div>
+        <p th:text="${review.text}">Testo recensione...</p>
+      </li>
+    </ul>
+
+    <div class="button-group" sec:authorize="hasAuthority('DEFAULT')">
+      <a th:href="@{/books/{id}/review(id=${book.id})}" class="btn">Aggiungi Recensione</a>
+    </div>
+  </section>
+
+  <!-- Azioni Admin -->
+  <div class="button-group" sec:authorize="hasAuthority('ADMIN')">
+    <a th:href="@{/books/edit/{id}(id=${book.id})}" class="btn">Modifica</a>
+    <form th:action="@{/books/delete/{id}(id=${book.id})}" method="post" style="display:inline;">
+      <button type="submit" class="btn">Elimina</button>
+    </form>
+  </div>
+</main>
+
+<footer th:replace="base :: footer"></footer>
+</body>
+</html>

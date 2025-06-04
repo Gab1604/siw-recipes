@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="it"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
+<head th:replace="base :: head"></head>
+<body>
+<header th:replace="base :: header"></header>
+
+<main class="content">
+  <h1>Catalogo Libri</h1>
+
+  <!-- Barra di ricerca -->
+  <form th:action="@{/books}" method="get" class="search-form">
+    <input type="text" name="q" placeholder="Cerca per titolo..." th:value="${param.q}" />
+    <button type="submit" class="btn">Cerca</button>
+  </form>
+
+  <!-- Link per aggiungere un nuovo libro (solo admin) -->
+  <div class="button-group" sec:authorize="hasAuthority('ADMIN')">
+    <a th:href="@{/books/add}" class="btn">Aggiungi Libro</a>
+  </div>
+
+  <!-- Lista libri -->
+  <ul class="book-list">
+    <li th:each="book : ${books}" class="book-item">
+      <a th:href="@{/books/{id}(id=${book.id})}" th:text="${book.title}">Titolo</a>
+      <span>
+        <span th:each="author : ${book.authors}" th:text="${author.firstName + ' ' + author.lastName}">
+          Autore
+        </span>
+      </span>
+    </li>
+  </ul>
+</main>
+
+<footer th:replace="base :: footer"></footer>
+</body>
+</html>

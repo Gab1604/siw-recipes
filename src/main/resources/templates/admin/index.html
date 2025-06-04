@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="it"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
+<head th:replace="base :: head">
+  <title>Area Admin | SiwBooks</title>
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+  <style>
+    .admin-card {
+      display: block;
+      padding: 1.5rem;
+      background-color: #f9f9f9;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-decoration: none;
+      color: #333;
+      transition: box-shadow 0.3s ease;
+    }
+    .admin-card:hover {
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    }
+    .admin-card h2 {
+      margin-top: 0;
+      color: #1a73e8;
+      font-size: 1.4rem;
+    }
+    .admin-card p {
+      margin-bottom: 0;
+      font-size: 1rem;
+      color: #555;
+    }
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .welcome-message {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+<header th:replace="base :: header"></header>
+
+<main class="content">
+
+  <div sec:authorize="!hasAuthority('ADMIN')" class="alert alert-danger">
+    Non hai l'autorizzazione necessaria per accedere a quest'area.
+  </div>
+
+  <div sec:authorize="hasAuthority('ADMIN')">
+    <div class="welcome-message">
+      Benvenuto, <span th:text="${#authentication.name}">Admin</span>!
+    </div>
+
+    <h1>Area Amministrazione</h1>
+
+    <div th:if="${param.success}" class="alert alert-success">
+      Operazione completata con successo.
+    </div>
+
+    <div class="admin-grid">
+      <a th:href="@{/books/add}" class="admin-card">
+        <h2>Aggiungi Libro</h2>
+        <p>Crea un nuovo libro nel catalogo.</p>
+      </a>
+      <a th:href="@{/authors/add}" class="admin-card">
+        <h2>Aggiungi Autore</h2>
+        <p>Aggiungi nuovi autori al database.</p>
+      </a>
+      <a th:href="@{/admin/books}" class="admin-card">
+        <h2>Gestisci Libri</h2>
+        <p>Modifica o elimina libri esistenti.</p>
+      </a>
+      <a th:href="@{/admin/authors}" class="admin-card">
+        <h2>Gestisci Autori</h2>
+        <p>Modifica o elimina autori esistenti.</p>
+      </a>
+      <a th:href="@{/admin/users}" class="admin-card">
+        <h2>Gestisci Utenti</h2>
+        <p>Visualizza e gestisci gli utenti registrati.</p>
+      </a>
+      <a th:href="@{/admin/reviews}" class="admin-card">
+        <h2>Gestisci Recensioni</h2>
+        <p>Modifica o elimina recensioni degli utenti.</p>
+      </a>
+    </div>
+  </div>
+</main>
+
+<footer th:replace="base :: footer"></footer>
+</body>
+</html>
