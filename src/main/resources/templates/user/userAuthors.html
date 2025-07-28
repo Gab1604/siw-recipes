@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/authors.css">
+    <title>Autori</title>
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <img src="/images/logo_siw_books.png" alt="Logo SIW Books">
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/indexUser">Home</a></li>
+                <li><a href="/user/book">Libri</a></li>
+                <li><a href="/user/author">Autori</a></li>
+                <li><a href="/user/account">Account</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="content">
+        <form method="get" th:action="@{/user/author/search}" class="search-bar">
+            <input list="author-suggestions" name="query" placeholder="Cerca per nome o cognome..." autocomplete="off" required id="searchInput">
+            <datalist id="author-suggestions">
+                <option th:each="a : ${authors}"
+                        th:value="${a.name +' '+ a.surname}">[[${a.name +' '+ a.surname}]]
+                </option>
+            </datalist>
+            <button type="submit">Cerca</button>
+        </form>
+
+        <div id="no-author" th:if="${authors != null and authors.isEmpty()}">
+            <p>Nessun autore trovato per la tua ricerca.</p>
+        </div>
+
+        <section class="description">
+            <h1>Lista degli Autori</h1>
+            <p class="summary">
+                Benvenuto nella sezione degli autori di SIW Books. Qui puoi esplorare la nostra collezione di autori, 
+                visualizzare i dettagli e le immagini associate a ciascun autore. Se non trovi alcun autore, 
+                assicurati di aver effettuato l'accesso correttamente o contatta il supporto per assistenza.
+            </p>
+        </section>     
+
+        <div class="authors">
+            <a class="author-card" th:each="author : ${authors}" th:href="@{'/user/author/' + ${author.id}}">
+                <img th:if="${author.image != null and author.image.path != null}"
+                     th:src="@{'/uploads/' + ${author.image.path}}"
+                     alt="Foto di [[${author.title}]]"
+                     class="author-image">
+                <img th:if="${author.image == null or author.image.path == null}"
+                     src="/images/default_author.jpg"
+                     alt="Nessuna immagine disponibile"
+                     class="author-image">
+                <h2 th:text="${author.name + ' ' + author.surname}">Nome Cognome</h2>
+            </a>
+        </div>
+
+        <div id="no-author" th:if="${authors.isEmpty()}">
+            <p>Nessun autore trovato.</p>
+        </div>
+    </main>
+</body>
+</html>

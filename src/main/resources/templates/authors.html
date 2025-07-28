@@ -1,30 +1,66 @@
+
 <!DOCTYPE html>
-<html lang="it"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
-<head th:replace="base :: head"></head>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/authors.css">
+    <title>Autori</title>
+</head>
 <body>
-<header th:replace="base :: header"></header>
 
-<main class="content">
-  <h1>Elenco Autori</h1>
+    <header class="navbar">
+        <div class="logo">
+            <img src="/images/logo_siw_books.png" alt="Logo SIW Books">
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/book">Libri</a></li>
+                <li><a href="/author">Autori</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <!-- Link per aggiungere un autore (solo admin) -->
-  <div class="button-group" sec:authorize="hasAuthority('ADMIN')">
-    <a th:href="@{/authors/add}" class="btn">Aggiungi Autore</a>
-  </div>
+    <main class="content">
+        <form method="get" th:action="@{/author/search}" class="search-bar">
+            <input list="author-suggestions" name="query" placeholder="Cerca per nome o cognome..." autocomplete="off" required id="searchInput">
+            <datalist id="author-suggestions">
+                <option th:each="a : ${authors}"
+                        th:value="${a.name +' '+ a.surname}">[[${a.name +' '+ a.surname}]]
+                </option>
+            </datalist>
+            <button type="submit">Cerca</button>
+        </form>
+        <div id="no-author" th:if="${authors != null and authors.isEmpty()}">
+            <p>Nessun autore trovato per la tua ricerca.</p>
+        </div>
+        <section class="description">
+            <h1>Lista degli Autori</h1>
+            <p class="summary">
+                Benvenuto nella sezione degli autori di SIW Books. Qui puoi esplorare la nostra collezione di autori, 
+                visualizzare i dettagli e le immagini associate a ciascun autore. Se non trovi alcun autore, 
+                assicurati di aver effettuato l'accesso correttamente o contatta il supporto per assistenza.
+            </p>
+        </section>
+        <section class="authors">
+            <div class="author-card" th:each="author : ${authors}">
+                <a th:href="@{'/author' + '/'+ ${author.id}}">
+                    <!--Mostra l'immagine se esiste-->
+                    <img th:if="${author.image != null and author.image.path != null}"
+                        th:src="@{'/uploads/' + ${author.image.path}}"
+                        alt="Foto di [[${author.title}]]"
+                        class="author-image">
+                    <!--Immagine placeholder se nessuna immagine è presente-->
+                    <img th:if="${author.image == null or author.image.path == null}"
+                       alt="Nessuna immagine disponibile"
+                        class="author-image">
+                    <h2 th:text="${author.name + ' ' + author.surname}">Nome Cognome</h2>
+                </a>
+            </div>
+        </section>
 
-  <!-- Lista autori -->
-  <ul class="author-list">
-    <li th:each="author : ${authors}" class="author-item">
-      <a th:href="@{/authors/{id}(id=${author.id})}"
-         th:text="${author.firstName + ' ' + author.lastName}">
-        Autore
-      </a>
-    </li>
-  </ul>
-</main>
-
-<footer th:replace="base :: footer"></footer>
-</body>
+    <div id="no-author" th:if="${authors.isEmpty()}">
+        <p>Nessun autore trovato.</p>
+    </div>
 </html>

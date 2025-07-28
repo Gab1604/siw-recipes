@@ -1,80 +1,85 @@
+
 package it.uniroma3.siw.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import java.time.LocalDateTime;
 
 @Entity
 public class Review {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Min(1)
-	@Max(5)
-	private Integer rating;
+    @NotBlank(message = "Il titolo non può essere vuoto")
+    private String title; // 🆕 Campo aggiunto per il titolo della recensione
 
-	@NotBlank
-	@Lob
-	private String text;
+    @NotBlank(message = "Il testo della recensione non può essere vuoto")
+    @Column(columnDefinition = "TEXT")
+    private String text;
 
-	private LocalDateTime createdAt = LocalDateTime.now();
+    @Min(value = 1, message = "Il voto minimo è 1")
+    @Max(value = 5, message = "Il voto massimo è 5")
+    private int rating;
 
-	@ManyToOne
-	private User user;
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
 
-	@ManyToOne
-	private Book book;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-	// --- getters & setters ---
+    // Costruttore vuoto
+    public Review() {}
 
-	public Long getId() {
-		return id;
-	}
+    // Getter e Setter
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public Integer getRating() {
-		return rating;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setRating(Integer rating) {
-		this.rating = rating;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public String getText() {
-		return text;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public void setText(String text) {
-		this.text = text;
-	}
+    public String getText() {
+        return text;
+    }
 
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
+    public void setText(String text) {
+        this.text = text;
+    }
 
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
-	}
+    public int getRating() {
+        return rating;
+    }
 
-	public User getUser() {
-		return user;
-	}
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public Book getBook() {
+        return book;
+    }
 
-	public Book getBook() {
-		return book;
-	}
+    public void setBook(Book book) {
+        this.book = book;
+    }
 
-	// **Ecco il setter mancante**
-	public void setBook(Book book) {
-		this.book = book;
-	}
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuova Recensione</title>
+    <link rel="stylesheet" href="/css/form.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <img src="/images/logo_siw_books.png" alt="Logo SIW Books">
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/indexUser">Home</a></li>
+                <li><a href="/user/book">Libri</a></li>
+                <li><a href="/user/author">Autori</a></li>
+                <li><a href="/user/account">Account</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="content">
+        <h1>Nuova Recensione per: <span th:text="${book.title}">Titolo Libro</span></h1>
+        <p th:if="${errorMessage}" th:text="${errorMessage}" style="color:red"></p>
+        <div class="form-box">
+            <form th:action="@{'/user/book/' + ${book.id} + '/addReview'}" method="post" th:object="${review}">
+                <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
+                <div class="input-group">
+                    <label for="title">Titolo Recensione:</label>
+                    <input type="text" id="title" th:field="*{title}" required />
+                    <span th:if="${#fields.hasErrors('title')}" class="error-message">
+                        <p th:errors="*{title}">Titolo non valido</p>
+                    </span>
+                </div>
+                <div class="input-group">
+                    <label for="text">Testo:</label>
+                    <textarea id="text" th:field="*{text}" required></textarea>
+                    <span th:if="${#fields.hasErrors('text')}" class="error-message">
+                        <p th:errors="*{text}">Testo non valido</p>
+                    </span>
+                </div>
+                <div class="input-group">
+                    <label for="rating">Valutazione (1-5):</label>
+                    <input type="number" id="rating" th:field="*{rating}" min="1" max="5" required />
+                    <span th:if="${#fields.hasErrors('rating')}" class="error-message">
+                        <p th:errors="*{rating}">Valutazione non valida</p>
+                    </span>
+                </div>
+                <button type="submit">Invia Recensione</button>
+            </form>
+
+        </div>
+        <button type="button" th:onclick="'location.href=\'/user/book/' + ${book.id} + '\''">Annulla</button>
+
+    </div>
+
+</body>
+</html>

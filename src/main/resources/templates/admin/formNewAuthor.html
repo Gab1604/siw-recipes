@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/form.css">
+    <title>New Author</title>
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <img src="/images/logo_siw_books.png" alt="Logo SIW Books">
+        </div>
+        <nav>
+        </nav>
+    </header>
+    <div class="content">
+        <h1>Aggiungi un Nuovo Autore</h1>
+        <div class="form-box">
+            <form th:action="${author.id} != null ? @{/admin/author/{id}(id=${author.id})} : @{/admin/author}"
+                method="POST"
+                th:object="${author}"
+                enctype="multipart/form-data">
+                <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
+                <div class="input-group">
+                    <label>Nome:</label>
+                    <span><input type="text" id="name" placeholder="name" required th:field="*{name}" /></span>
+                    <span th:if="${#fields.hasErrors('name')}" class="error-message">
+                        <p th:errors="*{name}">Nome non valido</p>
+                    </span>
+                </div>
+                <div class="input-group">
+                    <label>Cognome:</label>
+                    <span><input type="text" id="surname" placeholder="surname" required th:field="*{surname}" /></span>
+                    <span th:if="${#fields.hasErrors('surname')}" class="error-message">
+                        <p th:errors="*{surname}">Cognome non valido</p>
+                    </span>
+                </div>
+                <div class="input-group">
+                    <label>Nazionalità:</label>
+                    <span><input type="text" id="nationality" placeholder="nationality" required th:field="*{nationality}" /></span>
+                    <span th:if="${#fields.hasErrors('nationality')}" class="error-message">
+                        <p th:errors="*{nationality}">Nazionalità non valida</p>
+                    </span>
+                </div>
+                <div class="input-group">
+                    <label>Anno di nascita:</label>
+                    <span><input type="date" id="birth" placeholder="birth" required th:field="*{birth}" th:attr="max=${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}"/></span>
+                    <span th:if="${#fields.hasErrors('birth')}" class="error-message">
+                        <p th:errors="*{birth}">Anno non valido</p>
+                    </span>
+                </div>
+                <div class="input-group">
+                    <label>Anno della morte:</label>
+                    <span><input type="date" id="death" placeholder="death" th:field="*{death}" th:attr="max=${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}" /></span>
+                    <span th:if="${#fields.hasErrors('death')}" class="error-message">
+                        <p th:errors="*{death}">Anno non valido</p>
+                    </span>
+                </div>
+                <!-- Immagini -->
+                <div class="input-group">
+                    <div>
+                        <label>Immagine:</label>
+                        <div>
+                            <label class="custom-file-upload">
+                            Scegli Immagine
+                            <input type="file" name="authorImages" accept="image/*" id="fileInput" />
+                            </label>
+                        </div>
+                    <div id="preview" class="image-preview"></div> 
+                    </label>
+                    </div>
+                </div>
+                <div th:if="${allBooks != null and #lists.size(allBooks) > 0}" class="input-group">
+                    <label>Libri associati:</label>
+                    <span>
+                        <select multiple name="bookIds" id="bookIds"  class="styled-select">
+                            <option th:each="book : ${allBooks}"
+                                    th:value="${book.id}"
+                                    th:text="${book.title}"
+                                    th:selected="${author.books != null} ? ${author.books.contains(book)} : false">
+                            </option>
+                        </select>
+                    </span>
+                </div>
+
+                <button type="submit">Aggiungi Autore</button>
+            </form>
+        </div>
+        
+        <button type="button" onclick="location.href='/admin/author'">Annulla</button>
+    </div>
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+
+        fileInput.addEventListener('change', function () {
+            preview.innerHTML = ''; // Pulisce eventuali anteprime precedenti
+
+            const files = Array.from(fileInput.files);
+
+            files.forEach(file => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                preview.appendChild(img);
+                };
+
+                reader.readAsDataURL(file);
+            }
+            });
+        });
+    </script>
+</body>
+</html>

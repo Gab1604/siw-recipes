@@ -1,18 +1,14 @@
-package it.uniroma3.siw.repository;
 
-import it.uniroma3.siw.model.Credentials;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+package it.uniroma3.siw.repository;
 
 import java.util.Optional;
 
-@Repository
-public interface CredentialsRepository extends JpaRepository<Credentials, Long> {
+import org.springframework.data.repository.CrudRepository;
 
-    /**
-     * Trova le credenziali associate a uno username.
-     * @param username lo username
-     * @return Optional contenente le credenziali se esistono
-     */
-    Optional<Credentials> findByUsername(String username);
+import it.uniroma3.siw.model.Credentials;
+
+public interface CredentialsRepository extends CrudRepository<Credentials, Long> {
+
+	public Optional<Credentials> findByUsername(String username);
+
 }

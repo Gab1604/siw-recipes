@@ -1,112 +1,167 @@
 package it.uniroma3.siw.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.PastOrPresent;
 
 @Entity
 public class Author {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
 
-	@NotBlank
-	private String firstName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	@NotBlank
-	private String lastName;
+    @NotBlank
+    private String name;
 
-	@Past
-	private LocalDate birthDate;
+    @NotBlank
+    private String surname;
 
-	private LocalDate deathDate;
+    @NotBlank
+    private String nationality;
 
-	private String nationality;
+    @NotNull
+    @Past(message = "La data di nascita deve essere nel passato")
+    private LocalDate birth;
 
-	@Lob
-	private byte[] photo;
+    @OneToOne(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private Image image;
 
-	@ManyToMany(mappedBy = "authors")
-	private Set<Book> books = new HashSet<>();
+    
+    @PastOrPresent(message = "La data di morte deve essere nel passato o presente")
+    private LocalDate death;
 
-	// --- Getters & Setters ---
+    @ManyToMany(mappedBy = "authors", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Book> books = new ArrayList<>();
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public String getSurname() {
+        return surname;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
 
-	public LocalDate getBirthDate() {
-		return birthDate;
-	}
+    public String getNationality() {
+        return nationality;
+    }
 
-	public void setBirthDate(LocalDate birthDate) {
-		this.birthDate = birthDate;
-	}
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
 
-	public LocalDate getDeathDate() {
-		return deathDate;
-	}
+    public LocalDate getBirth() {
+        return birth;
+    }
 
-	public void setDeathDate(LocalDate deathDate) {
-		this.deathDate = deathDate;
-	}
+    public void setBirth(LocalDate dateOfBirth) {
+        this.birth = dateOfBirth;
+    }
 
-	public String getNationality() {
-		return nationality;
-	}
+    public LocalDate getDeath() {
+        return death;
+    }
 
-	public void setNationality(String nationality) {
-		this.nationality = nationality;
-	}
+    public void setDeath(LocalDate dateOfDeath) {
+        this.death = dateOfDeath;
+    }
 
-	public byte[] getPhoto() {
-		return photo;
-	}
+    public List<Book> getBooks() {
+        return books;
+    }
 
-	public void setPhoto(byte[] photo) {
-		this.photo = photo;
-	}
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
 
-	public Set<Book> getBooks() {
-		return books;
-	}
+    public Image getImage() {
+        return image;
+    }
 
-	public void setBooks(Set<Book> books) {
-		this.books = books;
-	}
+    public void setImage(Image image) {
+        this.image= image;
+    }
 
-	// --- Helper methods for bidirectional relationship ---
-	public void addBook(Book book) {
-		this.books.add(book);
-		book.getAuthors().add(this);
-	}
 
-	public void removeBook(Book book) {
-		this.books.remove(book);
-		book.getAuthors().remove(this);
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((surname == null) ? 0 : surname.hashCode());
+        result = prime * result + ((birth == null) ? 0 : birth.hashCode());
+        result = prime * result + ((death == null) ? 0 : death.hashCode());
+        return result;
+    }
 
-	// (Optional) equals, hashCode, toString...
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Author other = (Author) obj;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (surname == null) {
+            if (other.surname != null)
+                return false;
+        } else if (!surname.equals(other.surname))
+            return false;
+        if (birth == null) {
+            if (other.birth != null)
+                return false;
+        } else if (!birth.equals(other.birth))
+            return false;
+        if (death == null) {
+            if (other.death != null)
+                return false;
+        } else if (!death.equals(other.death))
+            return false;
+        return true;
+    }
+    public void addBook(Book book) {
+        if (book != null && !this.books.contains(book)) {
+            this.books.add(book);
+            if (!book.getAuthors().contains(this)) {
+                book.getAuthors().add(this);
+            }
+        }
+    }
+
 }

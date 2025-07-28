@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifica Libro</title>
+    <link rel="stylesheet" href="/css/form.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+            <img src="/images/logo_siw_books.png" alt="Logo SIW Books">
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/indexAdmin">Home</a></li>
+                <li><a href="/admin/book">Libri</a></li>
+                <li><a href="/admin/author">Autori</a></li>
+                <li><a href="/admin/account">Account</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="content">
+        <h1>Modifica Libro</h1>
+
+        <form th:action="@{/admin/book/{id}(id=${book.id})}"
+              method="post"
+              th:object="${book}"
+              enctype="multipart/form-data">
+
+            <!-- Errori globali -->
+            <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">Errore</p>
+
+            <!-- Titolo -->
+            <div class="input-group">
+                <label for="title">Titolo:</label>
+                <input type="text" id="title" placeholder="Titolo" required th:field="*{title}" />
+                <span th:if="${#fields.hasErrors('title')}" class="error-message">
+                    <p th:errors="*{title}">Titolo non valido</p>
+                </span>
+            </div>
+
+            <!-- Anno -->
+            <div class="input-group">
+                <label for="year">Anno di Pubblicazione:</label>
+                <input type="number" id="year" placeholder="Anno" required th:field="*{year}" />
+                <span th:if="${#fields.hasErrors('year')}" class="error-message">
+                    <p th:errors="*{year}">Anno non valido</p>
+                </span>
+            </div>
+
+            <!-- Immagini -->
+            <div class="input-group">
+                <label>Immagini:</label>
+                    <div>
+                        <label class="custom-file-upload">
+                        Scegli Immagini
+                        <input type="file" name="bookImages" accept="image/*" multiple id="fileInput" />
+                        </label>
+                    </div>
+                    <div id="preview" class="image-preview"></div> <!-- Qui verranno mostrate le immagini -->
+            </div>
+
+            <!-- Immagine esistente (se presente) -->
+            <div th:if="${book.images}">
+                <label>Galleria Immagini attuali</label>
+                <div th:each="img : ${book.images}" th:if="${img != null}">
+                    <img th:src="'/uploads/' + ${img.path}" width="30%" alt="Immagine libro"/>
+                </div>
+            </div>
+            <!-- Autori associati -->
+            <div th:if="${allAuthors != null and #lists.size(allAuthors) > 0}" class="input-group">
+                    <label>Autori associati:</label>
+                    <span>
+                        <select multiple name="authorIds" id="authorIds"  class="styled-select">
+                            <option th:each="author : ${allAuthors}"
+                                    th:value="${author.id}"
+                                    th:text="${author.name + ' ' + author.surname}"
+                                    th:selected="${book.authors != null} ? ${book.authors.contains(author)} : false">
+                            </option>
+                        </select>
+                    </span>
+                </div>
+            <!-- Pulsanti -->
+            <button type="submit">Salva Modifiche</button>
+            
+        </form>
+        <button type="button" onclick="location.href='/admin/book'">Annulla</button>
+    </div>
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+
+        fileInput.addEventListener('change', function () {
+            preview.innerHTML = ''; // Pulisce eventuali anteprime precedenti
+
+            const files = Array.from(fileInput.files);
+
+            files.forEach(file => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                preview.appendChild(img);
+                };
+
+                reader.readAsDataURL(file);
+            }
+            });
+        });
+    </script>
+</body>
+</html>

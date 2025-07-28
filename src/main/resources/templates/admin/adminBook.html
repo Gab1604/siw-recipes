@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>adminBook</title>
+    <link rel="stylesheet" href="/css/book.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <img src="/images/logo_siw_books.png" alt="Logo SIW Books">
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/indexAdmin">Home</a></li>
+                <li><a href="/admin/book">Libri</a></li>
+                <li><a href="/admin/author">Autori</a></li>
+                <li><a href="/admin/account">Account</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section class="book" th:if="${book}">
+            <h2 th:text="${book.title}">Titolo del libro</h2>
+            <p><strong>Anno di pubblicazione:</strong> <span th:text="${book.year}">2000</span></p>
+
+            <div th:if="${book.images}">
+                    <h2>Galleria Immagini</h2>
+                    <div th:each="img : ${book.images}" th:if="${img != null}">
+                        <img th:src="@{'/uploads/' + ${img.path}}" width="13%" alt="Immagine libro" />
+                    </div>
+            </div>
+            <span th:if="${book}">
+                <a th:href="@{/admin/modificaBook/{id}(id=${book.id})}">Modifica Libro</a>
+            </span>
+            <form th:action="@{/admin/deleteBook/{id}(id=${book.id})}" method="get"  class="inline-form">
+                <button type="submit" class="link-button">Elimina</button>
+            </form>
+        </section>
+
+    
+
+    <div th:unless="${book}">
+        <p>Book not found.</p>
+    </div>
+    <section class="reviews" th:if="${reviews}">
+            <h3>Recensioni:</h3>
+            <div th:each="review : ${reviews}" class="review">
+                <h4 th:text="${review.title}">Titolo recensione</h4>
+                <p><strong>Voto:</strong> <span th:text="${review.rating}">5</span>/5</p>
+                <p th:text="${review.text}">Testo della recensione</p>
+                <p><em>Utente:</em> <span th:text="${review.user.name}">Mario Rossi</span></p>
+                <a th:href="@{'/admin/deleteReview/' + ${review.id}}" class="btn btn-danger">Elimina Recensione</a>
+            </div>
+            <div th:if="${#lists.isEmpty(reviews)}">
+                <p>Non ci sono ancora recensioni per questo libro.</p>
+            </div>
+    </section>
+    <div class="authors-section" th:if="${book.authors != null and #lists.size(book.authors) > 0}">
+                    <h3>Autori del libro:</h3>
+                    <div class="authors-flex">
+                        <div class="author-card" th:each="author : ${book.authors}">
+                            <a th:href="@{'/admin/author' + '/'+ ${author.id}}">
+                                <div th:if="${author.image != null}">
+                                    <img th:src="@{'/uploads/' + ${author.image.path}}" alt="Immagine Autore"/>
+                                </div>
+
+                                <h4 th:text="${author.name + ' ' + author.surname}">Nome Cognome</h4>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+</body>
+</html>

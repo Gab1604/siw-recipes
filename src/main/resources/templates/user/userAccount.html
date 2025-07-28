@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/account.css">
+    <title>Account</title>
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <img src="/images/logo_siw_books.png" alt="Logo SIW Books">
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/indexUser">Home</a></li>
+                <li><a href="/user/book">Libri</a></li>
+                <li><a href="/user/author">Autori</a></li>
+                <li><a href="/user/account">Account</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="account">
+            <h2>Dettagli Account</h2>
+            <p>Username: <span th:text="${credentials.username}">username</span></p>
+            <p>Ruolo: <span th:text="${credentials.role}">Ruolo</span></p>
+        </section>
+        <section class="actions">
+            <h3>Azioni</h3>
+            <a th:href="@{/user/modificaAccount}" class="link-button">Modifica Account</a>
+            <form th:action="@{'/user/deleteAccount/' + ${credentials.id}}" method="post" class="inline-form">
+                <button type="submit" class="link-button">Elimina Account</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

@@ -1,119 +1,56 @@
+
 package it.uniroma3.siw.controller;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 
 import it.uniroma3.siw.model.Author;
 import it.uniroma3.siw.service.AuthorService;
-import jakarta.validation.Valid;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import it.uniroma3.siw.service.BookService;
+
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
 
 @Controller
-@RequestMapping("/authors")
 public class AuthorController {
 
-    private final AuthorService authorService;
+    @Autowired AuthorService authorService;
+    @Autowired BookService bookService;
 
-    public AuthorController(AuthorService authorService) {
-        this.authorService = authorService;
-    }
 
-    /**
-     * Aggiunge, in tutte le view di questo controller,
-     * l'attributo "currentUsername" con il nome dell’utente autenticato,
-     * o null se il client non è loggato.
-     */
-    @ModelAttribute("currentUsername")
-    public String populateCurrentUsername() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
-            return auth.getName();
-        }
-        return null;
-    }
-
-    // ——————————————————————————————
-    // List & Detail (accessibili a tutti)
-    // ——————————————————————————————
-
-    @GetMapping
-    public String listAuthors(Model model) {
+    @GetMapping("/author")
+    public String showAuthors(Model model) {
         model.addAttribute("authors", authorService.findAll());
-        return "authors"; // Thymeleaf template: authors.html
+        return "authors";
     }
 
-    @GetMapping("/{id}")
-    public String showAuthor(@PathVariable Long id, Model model) {
-        var authorOpt = authorService.findById(id);
-        if (authorOpt.isEmpty()) {
-            return "redirect:/authors?error=notfound";
+    @GetMapping("/author/{id}")
+    public String getAuthor(@PathVariable Long id, Model model) {
+        Optional<Author> optionalAuthor = authorService.findByIdWithBooks(id);
+        if (!optionalAuthor.isPresent()) {
+            return "redirect:/author"; // o una pagina 404
         }
-        model.addAttribute("author", authorOpt.get());
-        return "author"; // Thymeleaf template: author.html
+        Author author = optionalAuthor.get();
+        model.addAttribute("author", author);
+        return "author";
+    }
+    @GetMapping("/author/search")
+    public String searchAuthors(@RequestParam("query") String query, Model model) {
+        List<Author> authors = authorService.findByNameOrSurname(query);
+        model.addAttribute("authors", authors);
+        return "authors"; // Nome del template HTML
     }
 
-    // ——————————————————————————————
-    // Create (solo ADMIN)
-    // ——————————————————————————————
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/add")
-    public String addAuthorForm(Model model) {
-        model.addAttribute("author", new Author());
-        return "add-author"; // Thymeleaf template: add-author.html
-    }
+    
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/add")
-    public String addAuthorSubmit(@Valid @ModelAttribute("author") Author author,
-                                  BindingResult result,
-                                  Model model) {
-        if (result.hasErrors()) {
-            return "add-author";
-        }
-        authorService.save(author);
-        return "redirect:/authors";
-    }
 
-    // ——————————————————————————————
-    // Update (solo ADMIN)
-    // ——————————————————————————————
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/edit/{id}")
-    public String editAuthorForm(@PathVariable Long id, Model model) {
-        var authorOpt = authorService.findById(id);
-        if (authorOpt.isEmpty()) {
-            return "redirect:/authors?error=notfound";
-        }
-        model.addAttribute("author", authorOpt.get());
-        return "edit-author"; // Thymeleaf template: edit-author.html
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/edit/{id}")
-    public String editAuthorSubmit(@PathVariable Long id,
-                                   @Valid @ModelAttribute("author") Author author,
-                                   BindingResult result) {
-        if (result.hasErrors()) {
-            return "edit-author";
-        }
-        author.setId(id);
-        authorService.save(author);
-        return "redirect:/authors/" + id;
-    }
-
-    // ——————————————————————————————
-    // Delete (solo ADMIN)
-    // ——————————————————————————————
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/delete/{id}")
-    public String deleteAuthor(@PathVariable Long id) {
-        authorService.deleteById(id);
-        return "redirect:/authors";
-    }
 }

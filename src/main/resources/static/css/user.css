@@ -1,0 +1,402 @@
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            position: relative;
+            min-height: 100vh;
+            color: #f4ecd8;
+            font-family: 'Merriweather', serif;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #2c1810 0%, #3d2817 25%, #4a2f1a 50%, #3d2817 75%, #2c1810 100%);
+            background-attachment: fixed;
+            width: 100vw;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('/images/indexImage.webp');
+            background-size: cover;
+            background-position: center;
+            z-index: -2;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(139, 69, 19, 0.15) 0%, transparent 60%),
+                radial-gradient(circle at 75% 75%, rgba(160, 82, 45, 0.15) 0%, transparent 60%),
+                radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 70%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><pattern id="oxfordTexture" width="200" height="200" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="2" fill="%23f4ecd8" opacity="0.03"/><circle cx="150" cy="150" r="1.5" fill="%23d4af37" opacity="0.02"/><circle cx="100" cy="20" r="1" fill="%23f4ecd8" opacity="0.04"/><circle cx="20" cy="180" r="1" fill="%23b8941f" opacity="0.02"/></pattern></defs><rect width="200" height="200" fill="url(%23oxfordTexture)"/></svg>');
+            pointer-events: none;
+            z-index: -1;
+            animation: subtleFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes subtleFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(1deg); }
+            66% { transform: translateY(5px) rotate(-0.5deg); }
+        }
+
+        /* Logo principale - nascosto per layout centrato */
+        .logo {
+            display: none;
+        }
+
+        @keyframes gentleGlow {
+            0% { filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.5)); }
+            100% { filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 20px rgba(212, 175, 55, 0.3)); }
+        }
+
+        .logo img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Layout principale */
+        .main-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            width: 100vw;
+        }
+
+        .container {
+            font-family: 'Merriweather', serif;
+            background: linear-gradient(145deg, rgba(44, 24, 16, 0.95) 0%, rgba(61, 40, 23, 0.9) 100%);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 600px;
+            min-height: 80vh;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(244, 236, 216, 0.1),
+                0 0 0 3px rgba(212, 175, 55, 0.3);
+            border: 2px solid rgba(139, 69, 19, 0.6);
+            position: relative;
+            animation: fadeInUp 1s ease-out;
+            margin: auto;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, transparent, #d4af37, #b8941f, #d4af37, transparent);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .container::after {
+            content: '📚';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(145deg, #d4af37 0%, #b8941f 100%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Messaggio di benvenuto */
+        .welcome-message {
+            font-family: 'Merriweather', serif;
+            text-align: center;             
+            margin-bottom: 3rem;
+            color: #f4ecd8;
+        }
+
+        h1 {
+            font-size: 2.8rem;             
+            margin-bottom: 1rem;
+            color: #d4af37;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 1px;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); }
+            100% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.3); }
+        }
+
+        h3 {
+            font-size: 1.3rem;               
+            margin-bottom: 2rem;
+            font-weight: 400;
+            line-height: 1.6;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            color: #f4ecd8;
+        }
+
+        /* Sezione di registrazione/login (se presente) */
+        .auth-section {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+            width: 100%;
+        }
+
+        .auth-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #f4ecd8;
+            font-weight: 400;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .auth-btn {
+            font-family: 'Merriweather', serif;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, #d4af37 0%, #b8941f 100%);
+            color: #2c1810;
+            text-shadow: none;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            min-width: 120px;
+        }
+
+        .auth-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .auth-btn:hover::before {
+            left: 100%;
+        }
+
+        .auth-btn:hover {
+            background: linear-gradient(145deg, #e0c200 0%, #d4af37 100%);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+        }
+        /* Sezione azioni */
+        .collection-preview {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .collection-preview h3 {
+            font-size: 1.3rem;
+            color: #d4af37;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .actions {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 400px;
+            gap: 1rem;
+        }
+
+        /* Bottoni principali (Logout e Account) */
+        #logout, #account {
+            font-family: 'Merriweather', serif;
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 0.75rem 0;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;            
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, #d4af37 0%, #b8941f 100%);
+            color: #2c1810;
+            text-shadow: none;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Bottoni azione secondari */
+        .action-btn {
+            font-family: 'Merriweather', serif;
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 0.75rem 0;
+            padding: 1rem 2rem;
+            border: 2px solid rgba(212, 175, 55, 0.6);
+            border-radius: 25px;
+            font-size: 1.1em;            
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, rgba(212, 175, 55, 0.3) 0%, rgba(184, 148, 31, 0.3) 100%);
+            color: #f4ecd8;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Effetti hover per tutti i bottoni */
+        #logout::before, #account::before, .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        #logout:hover::before, #account:hover::before {
+            left: 100%;
+        }
+
+        .action-btn::before {
+            background: linear-gradient(90deg, transparent, rgba(244, 236, 216, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        #logout:hover, #account:hover {
+            background: linear-gradient(145deg, #e0c200 0%, #d4af37 100%);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+        }
+
+        .action-btn:hover {
+            color: #d4af37;
+            border-color: #d4af37;
+            background: linear-gradient(145deg, rgba(212, 175, 55, 0.4) 0%, rgba(184, 148, 31, 0.4) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.2);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .container {
+                width: 95%;
+                padding: 2rem 1.5rem;
+                min-height: 70vh;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            h3 {
+                font-size: 1.1rem;
+            }
+
+            #logout, #account, .action-btn, .auth-btn {
+                width: 100%;
+                max-width: 280px;
+                font-size: 1.1em;
+                padding: 0.9rem 1.5rem;
+            }
+
+            .welcome-message {
+                margin-bottom: 2rem;
+            }
+
+            .auth-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .auth-section {
+                margin-bottom: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem 1rem;
+                min-height: 60vh;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h3 {
+                font-size: 1rem;
+            }
+
+            #logout, #account, .action-btn, .auth-btn {
+                font-size: 1rem;
+                padding: 0.8rem 1rem;
+            }
+        }

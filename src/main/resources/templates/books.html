@@ -1,38 +1,69 @@
+
 <!DOCTYPE html>
-<html lang="it"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
-<head th:replace="base :: head"></head>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books</title>
+    <link rel="stylesheet" href="/css/books.css">
+</head>
 <body>
-<header th:replace="base :: header"></header>
+    <header class="navbar">
+        <div class="logo">
+            <img src="/images/logo_siw_books.png" alt="Logo SIW Books">
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/book">Libri</a></li>
+                <li><a href="/author">Autori</a></li>
+            </ul>
+        </nav>
+    </header>
 
-<main class="content">
-  <h1>Catalogo Libri</h1>
+    <main class="content">
+        <form method="get" th:action="@{/book/search}" class="search-bar">
+            <input list="book-suggestions" name="query" placeholder="Cerca per titolo..." autocomplete="off" required id="searchInput">
+            <datalist id="book-suggestions">
+                <option th:each="b : ${books}"
+                        th:value="${b.title}">[[${b.title}]]
+                </option>
+            </datalist>
+            <button type="submit">Cerca</button>
+        </form>
+        <div id="no-book" th:if="${books != null and books.isEmpty()}">
+            <p>Nessun libro trovato per la tua ricerca.</p>
+        </div>
+        <section class="description">
+            <h1>Lista dei libri</h1>
+            <p class="summary">
+                Benvenuto nella sezione dei libri di SIW Books. Qui puoi esplorare la nostra collezione di libri, 
+                visualizzare i dettagli e le immagini associate a ciascun libro.
+            </p>
+        </section>
+       
+        <section class="books">
+            <div class="book-card" th:each="book : ${books}">
+                <a th:href="@{'/book' + '/'+ ${book.id}}">
+                    <!-- Mostra la prima immagine se esiste -->
+                    <img th:if="${book.images != null and !book.images.isEmpty()}"
+                        th:src="@{'/uploads/' + ${book.images[0].path}}"
+                        alt="Copertina di [[${book.title}]]"
+                        class="book-image">
 
-  <!-- Barra di ricerca -->
-  <form th:action="@{/books}" method="get" class="search-form">
-    <input type="text" name="q" placeholder="Cerca per titolo..." th:value="${param.q}" />
-    <button type="submit" class="btn">Cerca</button>
-  </form>
+                    <!-- Immagine placeholder se nessuna immagine è presente -->
+                    <img th:if="${book.images == null or book.images.isEmpty()}"
+                        alt="Nessuna immagine disponibile"
+                        class="book-image">
 
-  <!-- Link per aggiungere un nuovo libro (solo admin) -->
-  <div class="button-group" sec:authorize="hasAuthority('ADMIN')">
-    <a th:href="@{/books/add}" class="btn">Aggiungi Libro</a>
-  </div>
+                    <h2 th:text="${book.title}">Titolo del libro</h2>
+                    <p th:text="${book.year}">Anno di pubblicazione</p>
+                </a>
+            </div>
+        </section>
+    </main>
 
-  <!-- Lista libri -->
-  <ul class="book-list">
-    <li th:each="book : ${books}" class="book-item">
-      <a th:href="@{/books/{id}(id=${book.id})}" th:text="${book.title}">Titolo</a>
-      <span>
-        <span th:each="author : ${book.authors}" th:text="${author.firstName + ' ' + author.lastName}">
-          Autore
-        </span>
-      </span>
-    </li>
-  </ul>
-</main>
-
-<footer th:replace="base :: footer"></footer>
-</body>
+    <div id="no-book" th:if="${books.isEmpty()}">
+        <p>Nessun libro trovato.</p>
+    </div>
 </html>

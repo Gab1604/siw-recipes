@@ -1,25 +1,29 @@
+
 package it.uniroma3.siw.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Image {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Lob
-    private byte[] data;
-
-    private String filename;
-
-    private String contentType; // es. "image/jpeg", "image/png"
+    private String path;    // Path to the image file
 
     @ManyToOne
-    private Book book;
+    private Book book; // The book this image belongs to
 
-    // --- Getters & Setters ---
+    @OneToOne
+    private Author author; // The author this image belongs to
+
+    
 
     public Long getId() {
         return id;
@@ -29,28 +33,12 @@ public class Image {
         this.id = id;
     }
 
-    public byte[] getData() {
-        return data;
+    public String getPath() {
+        return path;
     }
 
-    public void setData(byte[] data) {
-        this.data = data;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public Book getBook() {
@@ -61,18 +49,37 @@ public class Image {
         this.book = book;
     }
 
-    // --- equals & hashCode ---
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Image)) return false;
-        Image image = (Image) o;
-        return id != null && id.equals(image.id);
+    public Author getAuthor() {
+        return author;
     }
 
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+    
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((path == null) ? 0 : path.hashCode());
+        return result;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Image other = (Image) obj;
+        if (path == null) {
+            if (other.path != null)
+                return false;
+        } else if (!path.equals(other.path))
+            return false;
+        return true;
+    }
+
 }

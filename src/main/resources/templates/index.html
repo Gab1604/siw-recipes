@@ -1,25 +1,36 @@
+
 <!DOCTYPE html>
-<html lang="it"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
-<head th:replace="base :: head">
-    <title>Benvenuto su SiwBooks</title>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/index.css" />
+  <title>Index</title>
 </head>
 <body>
-    <header th:replace="base :: header"></header>
+  <header class="navbar">
+    <div class="logo">
+      <img src="/images/logo_siw_books.png" alt="Logo SIW Books" />
+    </div>
+  </header>
 
-    <main th:replace="base :: content">
-        <section class="homepage">
-            <h1>Benvenuto su <span class="highlight">SiwBooks</span></h1>
-            <p>Esplora il nostro catalogo, scopri autori e lascia recensioni!</p>
+  <div class="content">
+    <div class="form-box">
+      <h1>Benvenuto in SIW Books!</h1>
+      <h3>Registrati o accedi per scoprire il nostro mondo letterario</h3>
+      <div class="button-group">
+        <button onclick="location.href='/register'">Registrati</button>
+        <button onclick="location.href='/login'">Accedi</button>
+      </div>
 
-            <div class="button-group">
-                <a th:href="@{/books}" class="btn btn-primary">Scopri i Libri</a>
-                <a th:href="@{/authors}" class="btn btn-secondary">Vedi gli Autori</a>
-            </div>
-        </section>
-    </main>
+      <div class="actions">
+        <h3>📖 Scopri la nostra collezione di libri</h3>
+        <button class="action-btn" onclick="location.href='/book'">Libri</button>
 
-    <footer th:replace="base :: footer"></footer>
+        <h3>✍️ Conosci i nostri autori</h3>
+        <button class="action-btn" onclick="location.href='/author'">Autori</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

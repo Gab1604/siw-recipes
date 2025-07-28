@@ -1,140 +1,125 @@
 package it.uniroma3.siw.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import java.util.*;
-import java.time.*; // solo se ti serve LocalDate ecc.
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Rappresenta un libro con titolo, anno, sinossi, autori, recensioni e
- * immagini.
- */
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 @Entity
 public class Book {
 
-	private String imagePath;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    
+    @NotBlank
+    private String title;
 
-	public String getImagePath() {
-		return imagePath;
-	}
+    @NotNull
+    @Max(2025)
+    private Integer year; //anno di pubblicazione
 
-	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
-	}
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Image> images;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+    
 
-	@NotBlank
-	private String title;
+    @ManyToMany
+    @JoinTable(
+            name = "author_book",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+        )
+    private List<Author> authors = new ArrayList<>();
 
-	@PastOrPresent
-	private Integer publicationYear;
+    public Long getId() {
+        return id;
+    }
 
-	@Lob
-	@Column(length = 10000)
-	private String synopsis;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	@ManyToMany
-	@JoinTable(name = "book_author", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "author_id"))
-	private Set<Author> authors = new HashSet<>();
+    public String getTitle() {
+        return title;
+    }
 
-	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Review> reviews = new ArrayList<>();
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Image> images = new ArrayList<>();
+    public Integer getYear() {
+        return year;
+    }
 
-	// --- Getters & Setters ---
+    public void setYear(Integer year) {
+        this.year = year;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public List<Image> getImages() {
+        return images;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+    
+    public List<Author> getAuthors() {
+        return authors;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public void setAuthors(List<Author> authors) {
+        this.authors = authors;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1; 
+        result = prime * result + ((title == null) ? 0 : title.hashCode()); 
+        result = prime * result + ((year == null) ? 0 : year.hashCode());
+        return result;
+    }
 
-	public Integer getPublicationYear() {
-		return publicationYear;
-	}
-
-	public void setPublicationYear(Integer publicationYear) {
-		this.publicationYear = publicationYear;
-	}
-
-	public String getSynopsis() {
-		return synopsis;
-	}
-
-	public void setSynopsis(String synopsis) {
-		this.synopsis = synopsis;
-	}
-
-	public Set<Author> getAuthors() {
-		return authors;
-	}
-
-	public void setAuthors(Set<Author> authors) {
-		this.authors = authors;
-	}
-
-	public List<Review> getReviews() {
-		return reviews;
-	}
-
-	public void setReviews(List<Review> reviews) {
-		this.reviews = reviews;
-	}
-
-	public List<Image> getImages() {
-		return images;
-	}
-
-	public void setImages(List<Image> images) {
-		this.images = images;
-	}
-
-	// --- Helper methods per le relazioni bidirezionali ---
-
-	public void addAuthor(Author author) {
-		this.authors.add(author);
-		author.getBooks().add(this);
-	}
-
-	public void removeAuthor(Author author) {
-		this.authors.remove(author);
-		author.getBooks().remove(this);
-	}
-
-	public void addReview(Review review) {
-		this.reviews.add(review);
-		review.setBook(this);
-	}
-
-	public void removeReview(Review review) {
-		this.reviews.remove(review);
-		review.setBook(null);
-	}
-
-	public void addImage(Image image) {
-		this.images.add(image);
-		image.setBook(this);
-	}
-
-	public void removeImage(Image image) {
-		this.images.remove(image);
-		image.setBook(null);
-	}
-
-	// (Opzionale) equals, hashCode, toString...
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Book other = (Book) obj;
+        if (title == null) {
+            if (other.title != null)
+                return false;
+        } else if (!title.equals(other.title))
+            return false;
+        if (year == null) {
+            if (other.year != null)
+                return false;
+        } else if (!year.equals(other.year))
+            return false;
+        return true;
+    }
+    public void addAuthor(Author author) {
+        if (author!=null && !this.authors.contains(author)) {
+            this.authors.add(author);
+            if(!author.getBooks().contains(this)) {
+                author.getBooks().add(this);
+            }
+        }
+    }
 }
