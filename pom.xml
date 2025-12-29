@@ -1,59 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Parent Spring Boot: gestisce automaticamente le versioni compatibili -->
+    <!-- Parent Spring Boot -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.6</version>
-        <relativePath/> <!-- non risale alla directory padre -->
+        <version>3.5.9</version>
+        <relativePath/>
     </parent>
 
     <groupId>it.uniroma3.siw</groupId>
-    <artifactId>siw-books</artifactId>
+    <artifactId>siw-recipes</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>siw-books</name>
-    <description>Gestione libri e recensioni con Spring Boot</description>
+    <name>siw-recipes</name>
+    <description>Gestione ricette e recensioni con Spring Boot</description>
     <packaging>jar</packaging>
 
     <properties>
-        <!-- Impostiamo Java 17 e forziamo UTF-8 per sorgenti e risorse -->
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <!-- Facoltativo: forziamo Maven Central (se hai mirror aziendali) -->
     <repositories>
-      <repository>
-        <id>central</id>
-        <name>Maven Central Repository</name>
-        <url>https://repo.maven.apache.org/maven2</url>
-        <releases><enabled>true</enabled></releases>
-        <snapshots><enabled>false</enabled></snapshots>
-      </repository>
+        <repository>
+            <id>central</id>
+            <name>Maven Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <releases><enabled>true</enabled></releases>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
     </repositories>
 
     <dependencies>
-        <!-- Actuator (monitoraggio, opzionale) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
 
-        <!-- Spring Web MVC + Thymeleaf -->
+        <!-- Spring Web + Thymeleaf -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity6</artifactId>
@@ -70,12 +65,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <!-- Driver PostgreSQL -->
+        <!-- PostgreSQL -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -89,7 +85,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- DevTools (solo in sviluppo) -->
+        <!-- DevTools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -97,31 +93,32 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Testing -->
+        <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>
+
         <resources>
-            <!-- Copia tutte le risorse con filtering UTF-8 -->
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
                 <excludes>
-                    <!-- Se vuoi evitare di filtrare application.properties, eliminalo da qui -->
                     <exclude>application.properties</exclude>
                 </excludes>
             </resource>
-            <!-- Copia application.properties senza filtering -->
+
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>false</filtering>
@@ -132,13 +129,12 @@
         </resources>
 
         <plugins>
-            <!-- Plugin Spring Boot per esecuzione e packaging -->
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- Configurazione UTF-8 per il resource-filtering -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -147,6 +143,9 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
+
         </plugins>
+
     </build>
+
 </project>

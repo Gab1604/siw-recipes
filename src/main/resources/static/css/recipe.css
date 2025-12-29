@@ -1,0 +1,307 @@
+/* ==============================
+   DETTAGLIO RICETTA
+   ============================== */
+
+.recipe {
+    background-color: #ffffff;
+    padding: 40px 50px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f5e8e0;
+}
+
+/* ==============================
+   TITOLO
+   ============================== */
+
+.recipe h1,
+.recipe h2 {
+    margin-bottom: 16px;
+    color: #2c2c2c;
+}
+
+.recipe h1 {
+    font-size: 2.8rem;
+    line-height: 1.2;
+    color: #d4350c;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 20px;
+}
+
+.recipe h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 12px;
+    margin-top: 40px;
+}
+
+.recipe h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background-color: #d4350c;
+    border-radius: 2px;
+}
+
+/* ==============================
+   IMMAGINE PRINCIPALE
+   ============================== */
+
+.recipe-main-image {
+    width: 100%;
+    max-height: 480px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin: 28px 0;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.recipe-main-image:hover {
+    transform: scale(1.02);
+}
+
+/* ==============================
+   DESCRIZIONE
+   ============================== */
+
+.recipe-description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 35px;
+    padding: 20px;
+    background-color: #fef9f3;
+    border-left: 4px solid #d4350c;
+    border-radius: 8px;
+}
+
+/* ==============================
+   META INFO (tempo, difficoltà, ecc.)
+   ============================== */
+
+.recipe-meta {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 35px;
+    padding: 20px;
+    background-color: #fef9f3;
+    border-radius: 10px;
+    flex-wrap: wrap;
+}
+
+.recipe-meta > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.recipe-meta span {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #d4350c;
+}
+
+.recipe-meta label {
+    font-size: 0.9rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+/* ==============================
+   GALLERIA IMMAGINI
+   ============================== */
+
+.gallery {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #f5e8e0;
+}
+
+.gallery h3 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #2c2c2c;
+}
+
+.gallery-images {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.gallery-images img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    background-color: #eee;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.gallery-images img:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 6px 20px rgba(212, 53, 12, 0.15);
+}
+
+/* ==============================
+   RECENSIONI
+   ============================== */
+
+.reviews {
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 2px solid #f5e8e0;
+}
+
+.reviews h3 {
+    font-size: 1.8rem;
+    margin-bottom: 24px;
+    color: #2c2c2c;
+}
+
+.review {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 24px 0;
+    transition: background-color 0.2s ease;
+}
+
+.review:hover {
+    background-color: #fef9f3;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-left: -16px;
+    margin-right: -16px;
+    border-radius: 8px;
+}
+
+.review:last-child {
+    border-bottom: none;
+}
+
+.review h4 {
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+    color: #2c2c2c;
+    font-weight: 600;
+}
+
+.review p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+
+.review em {
+    color: #888;
+    font-size: 0.9rem;
+    display: block;
+    margin-top: 8px;
+}
+
+/* Rating stelle (se presente) */
+.review-rating {
+    color: #f39c12;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+}
+
+/* ==============================
+   AZIONI (admin / user)
+   ============================== */
+
+.recipe-actions {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #f5e8e0;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.recipe-actions button,
+.recipe-actions a {
+    flex: 1;
+    min-width: 180px;
+}
+
+/* ==============================
+   SEZIONI INGREDIENTI/PROCEDIMENTO
+   ============================== */
+
+.recipe-section {
+    margin: 35px 0;
+}
+
+.recipe-section ul,
+.recipe-section ol {
+    margin-left: 24px;
+    line-height: 1.8;
+}
+
+.recipe-section li {
+    margin-bottom: 12px;
+    font-size: 1.05rem;
+    color: #444;
+}
+
+.recipe-section li::marker {
+    color: #d4350c;
+    font-weight: 700;
+}
+
+/* ==============================
+   RESPONSIVE
+   ============================== */
+
+@media (max-width: 768px) {
+    .recipe {
+        padding: 28px 24px;
+    }
+    
+    .recipe h1 {
+        font-size: 2.2rem;
+    }
+    
+    .recipe h2 {
+        font-size: 1.5rem;
+    }
+    
+    .recipe-main-image {
+        max-height: 300px;
+        margin: 20px 0;
+    }
+    
+    .recipe-meta {
+        gap: 24px;
+        padding: 16px;
+    }
+    
+    .gallery-images {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+    }
+    
+    .gallery-images img {
+        height: 120px;
+    }
+    
+    .recipe-actions {
+        flex-direction: column;
+    }
+    
+    .recipe-actions button,
+    .recipe-actions a {
+        width: 100%;
+    }
+}

@@ -3,37 +3,54 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Area Admin - SIW Books</title>
-    <link rel="stylesheet" href="/css/index.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Area Admin - SIW Recipes</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/index.css">
 </head>
+
 <body>
-    <header class="navbar">
+
+<header class="navbar">
     <div class="logo">
-      <img src="/images/logo_siw_books.png" alt="Logo SIW Books" />
+        <a href="/indexAdmin">
+            <img src="/images/logo_siw_recipes.png" alt="Logo SIW Recipes" />
+        </a>
     </div>
-     <nav>
+    <nav>
         <ul class="nav-links">
+            <li><a href="/indexAdmin">Home</a></li>
+            <li><a href="/admin/recipes">Ricette</a></li>
             <li><a href="/admin/account">Account</a></li>
-			</div>
-			</div>
             <li><a href="/logout">Logout</a></li>
         </ul>
-      </nav>
-  </header>
-<div class="content">
-    <div class="form-box">
-      <h1>Bentornato Amministratore!</h1>
+    </nav>
+</header>
 
-      <div class="actions">
-        <h3>📖 Ecco la lista dei libri</h3>
-        <button class="action-btn" onclick="location.href='/admin/book'">Libri</button>
+<main class="home-container admin-home">
 
-        <h3>✍️ Ecco la lista degli autori</h3>
-        <button class="action-btn" onclick="location.href='/admin/author'">Autori</button>
-      </div>
-    </div>
-  </div>
+    <section class="hero">
+        <h1>Bentornato, <span sec:authentication="name">Amministratore</span>!</h1>
+        <h3>Pannello di controllo per la gestione dei contenuti.</h3>
+
+        <div class="actions">
+            
+            <div class="action-section">
+                <h3>🍽️ Gestione Ricette</h3>
+                <p style="color: #666; margin-bottom: 16px;">
+                    Aggiungi, modifica o rimuovi le ricette presenti nel sistema.
+                </p>
+                <button class="action-btn" onclick="location.href='/admin/recipes'">
+                    Vai alle ricette
+                </button>
+            </div>
+
+            </div>
+    </section>
+
+</main>
+
 </body>
 </html>

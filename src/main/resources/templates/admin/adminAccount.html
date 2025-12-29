@@ -1,68 +1,129 @@
-
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/account.css">
-    <title>Account</title>
-</head>
-<body>
-    <header class="navbar">
-        <div class="logo">
-            <img src="/images/logo_siw_books.png" alt="Logo SIW Books">
-        </div>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="/indexAdmin">Home</a></li>
-                <li><a href="/admin/book">Libri</a></li>
-                <li><a href="/admin/author">Autori</a></li>
-                <li><a href="/admin/account">Account</a></li>
-                <li><a href="/logout">Logout</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section class="account">
-            <h2>Dettagli Account</h2>
-            <p>Username: <span th:text="${credentials.username}">username</span></p>
-            <p>Ruolo: <span th:text="${credentials.role}">Ruolo</span></p>
-        </section>
-        <section class="actions">
-            <h3>Azioni</h3>
-            <a th:href="@{/admin/modificaAccount}" class="link-button">Modifica Account</a>
-            <form th:action="@{'/admin/deleteAccount/' + ${credentials.id}}" method="post" class="inline-form">
-                <button type="submit" class="link-button">Elimina Account</button>
-            </form>
-        </section>
-            <div class="user-list">
-                <h3>Utenti Registrati</h3>
-                <div th:if="${error}">
-                    <p th:text="${error}" style="color:red;"></p>
-                 </div>
+    <title>Account Admin - SIW Recipes</title>
 
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Username</th>
-                            <th>Ruolo</th>
-                            <th>Azioni</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="cred : ${utenti}">
-                            <td th:text="${cred.username}">username</td>
-                            <td th:text="${cred.role}">ruolo</td>
-                            <td>
-                                <form th:action="@{'/admin/deleteUser/' + ${cred.id}}" method="post" onsubmit="return confirm('Sei sicuro di voler eliminare questo utente?');">
-                                    <button type="submit">Elimina</button>
-                                </form>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/account.css">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">
+        <a href="/indexAdmin">
+            <img src="/images/logo_siw_recipes.png" alt="Logo SIW Recipes">
+        </a>
+    </div>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="/indexAdmin">Home</a></li>
+            <li><a href="/admin/recipes">Ricette</a></li>
+            <li><a href="/admin/account">Account</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="content">
+
+    <div class="account">
+        <h2>Profilo Amministratore</h2>
+
+        <div class="account-avatar">
+            <div class="avatar-placeholder">
+                <span th:text="${#strings.substring(credentials.username,0,1)}">A</span>
             </div>
-    </main>
-</body>
+        </div>
+
+        <div class="account-info">
+            <p>
+                <strong>Username:</strong>
+                <span class="value" th:text="${credentials.username}">username</span>
+            </p>
+            <p>
+                <strong>Ruolo:</strong>
+                <span class="role-badge admin" th:text="${credentials.role}">ADMIN</span>
+            </p>
+            <p>
+                <strong>Nome completo:</strong>
+                <span class="value" th:text="${credentials.user.name} + ' ' + ${credentials.user.surname}">Nome Cognome</span>
+            </p>
+        </div>
+    </div>
+
+    <div class="actions">
+        <h3>Gestione Personale</h3>
         
+        <div class="action-group">
+            <a th:href="@{/admin/modificaAccount}" class="action-btn">
+                ✏️ Modifica i tuoi dati
+            </a>
+        </div>
+
+        <div class="danger-zone">
+            <h3>Eliminazione Account</h3>
+            <p>Attenzione: eliminando il tuo account perderai i privilegi di amministrazione.</p>
+            <form th:action="@{'/admin/deleteAccount/' + ${credentials.id}}"
+                  method="post"
+                  onsubmit="return confirm('Sei sicuro di voler eliminare il tuo account?');">
+                <button type="submit">🗑️ Elimina il mio account</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="user-list">
+        <h3>Utenti Registrati</h3>
+
+        <div th:if="${error}" class="error-message">
+            <p th:text="${error}"></p>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 50px;"></th> <th>Username</th>
+                    <th>Ruolo</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="cred : ${utenti}">
+                    <td>
+                        <div class="user-avatar-mini" 
+                             style="background-color: #ddd; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #555;">
+                            <span th:text="${#strings.substring(cred.username,0,1)}">U</span>
+                        </div>
+                    </td>
+                    
+                    <td th:text="${cred.username}" style="font-weight: 600;">username</td>
+                    
+                    <td>
+                        <span th:class="'role-badge ' + ${#strings.toLowerCase(cred.role)}" 
+                              th:text="${cred.role}">ROLE</span>
+                    </td>
+                    
+                    <td>
+                        <form th:if="${cred.id != credentials.id}"
+                              th:action="@{'/admin/deleteUser/' + ${cred.id}}"
+                              method="post"
+                              onsubmit="return confirm('Sei sicuro di voler eliminare l\'utente ' + '${cred.username}' + '?');">
+                            <button type="submit" style="background-color: #c0392b; padding: 6px 12px; font-size: 0.85rem;">
+                                Elimina
+                            </button>
+                        </form>
+                        <span th:if="${cred.id == credentials.id}" style="color: #888; font-style: italic; font-size: 0.9rem;">
+                            (Tu)
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</main>
+
+</body>
 </html>

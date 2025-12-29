@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${recipe.title}">Dettaglio Ricetta</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/recipe.css">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">
+        <a href="/indexAdmin">
+            <img src="/images/logo_siw_recipes.png" alt="Logo">
+        </a>
+    </div>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="/indexAdmin">Home</a></li>
+            <li><a href="/admin/recipes">Ricette</a></li>
+            <li><a href="/admin/account">Account</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="content">
+
+    <div class="recipe" th:if="${recipe}">
+
+        <h1 th:text="${recipe.title}">Titolo Ricetta</h1>
+
+        <!-- IMMAGINE -->
+        <img class="recipe-main-image"
+             th:if="${recipe.images != null and !recipe.images.isEmpty()}"
+             th:src="${recipe.images[0].path}"
+             alt="Immagine ricetta"/>
+
+        <img class="recipe-main-image"
+             th:if="${recipe.images == null or recipe.images.isEmpty()}"
+             src="/images/recipe-placeholder.png"
+             alt="Nessuna immagine"/>
+
+        <div class="recipe-meta">
+            <div>
+                <label>Tempo</label>
+                <span th:text="${recipe.preparationTime} + ' min'">45 min</span>
+            </div>
+            <div>
+                <label>Difficoltà</label>
+                <span th:text="${recipe.difficulty}">MEDIA</span>
+            </div>
+            <div>
+                <label>Categoria</label>
+                <span th:text="${recipe.category}">Primi</span>
+            </div>
+        </div>
+
+        <div class="recipe-description"
+             th:text="${recipe.description}">
+            Descrizione...
+        </div>
+
+        <section class="recipe-section">
+            <h2>Procedimento</h2>
+            <p th:text="${recipe.procedure}">Testo procedimento...</p>
+        </section>
+
+        <div class="recipe-actions">
+            <a th:href="@{'/admin/recipes/edit/' + ${recipe.id}}"
+               class="action-btn">✏️ Modifica Dati</a>
+
+            <a th:href="@{'/admin/recipes/delete/' + ${recipe.id}}"
+               class="btn-secondary"
+               style="color: #c0392b; border-color: #c0392b;"
+               onclick="return confirm('Attenzione: questa azione è irreversibile. Confermi l\'eliminazione?');">
+                🗑 Elimina Ricetta
+            </a>
+        </div>
+
+    </div>
+
+</main>
+</body>
+</html>

@@ -1,36 +1,93 @@
-
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/css/index.css" />
-  <title>Index</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <title>SIW Recipes - Home</title>
 </head>
+
 <body>
-  <header class="navbar">
+
+<header class="navbar">
     <div class="logo">
-      <img src="/images/logo_siw_books.png" alt="Logo SIW Books" />
+        <a href="/">
+            <img src="/images/logo_siw_recipes.png" alt="Logo SIW Recipes">
+        </a>
     </div>
-  </header>
 
-  <div class="content">
-    <div class="form-box">
-      <h1>Benvenuto in SIW Books!</h1>
-      <h3>Registrati o accedi per scoprire il nostro mondo letterario</h3>
-      <div class="button-group">
-        <button onclick="location.href='/register'">Registrati</button>
-        <button onclick="location.href='/login'">Accedi</button>
-      </div>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/recipes">Ricette</a></li>
 
-      <div class="actions">
-        <h3>📖 Scopri la nostra collezione di libri</h3>
-        <button class="action-btn" onclick="location.href='/book'">Libri</button>
+            <li sec:authorize="isAnonymous()">
+                <a href="/login">Login</a>
+            </li>
 
-        <h3>✍️ Conosci i nostri autori</h3>
-        <button class="action-btn" onclick="location.href='/author'">Autori</button>
-      </div>
-    </div>
-  </div>
+            <li sec:authorize="isAuthenticated()">
+                <a href="/logout">Logout</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<main class="home-container">
+
+    <section class="hero">
+        <h1>Benvenuto in SIW Recipes</h1>
+        <h3>Scopri, crea e condividi le tue ricette preferite</h3>
+
+        <!-- Badge ADMIN -->
+        <div sec:authorize="hasAuthority('ADMIN')">
+            <span class="badge-admin">ADMIN</span>
+        </div>
+
+        <div class="actions">
+            <button class="action-btn" onclick="location.href='/recipes'">
+                🍝 Vai alle ricette
+            </button>
+
+            <!-- CTA dinamica -->
+            <button class="action-btn btn-secondary"
+                    sec:authorize="isAnonymous()"
+                    onclick="location.href='/login'">
+                👤 Accedi
+            </button>
+
+        </div>
+    </section>
+
+    <section class="featured">
+        <h2>Ricette in evidenza</h2>
+
+        <div class="recipe-grid">
+            <div class="recipe-card" th:each="recipe : ${recipes}">
+                <a th:href="@{'/recipes/' + ${recipe.id}}">
+
+                    <img th:if="${recipe.images != null and !recipe.images.isEmpty()}"
+                         th:src="${recipe.images[0].path}"
+                         alt="Immagine ricetta"/>
+
+                    <img th:if="${recipe.images == null or recipe.images.isEmpty()}"
+                         src="/images/recipe-placeholder.png"
+                         alt="Nessuna immagine"/>
+
+                    <h3 th:text="${recipe.title}">Titolo Ricetta</h3>
+                </a>
+            </div>
+        </div>
+
+        <div class="more">
+            <a href="/recipes">→ Vedi tutte le ricette</a>
+        </div>
+    </section>
+
+</main>
+
 </body>
 </html>

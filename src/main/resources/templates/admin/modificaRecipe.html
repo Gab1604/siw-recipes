@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifica Ricetta - Admin</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/form.css">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">
+        <a href="/indexAdmin"><img src="/images/logo_siw_recipes.png" alt="Logo"></a>
+    </div>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="/indexAdmin">Home</a></li>
+            <li><a href="/admin/recipes">Ricette</a></li>
+            <li><a href="/admin/account">Account</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="content">
+
+    <h1>Modifica ricetta</h1>
+
+    <div class="form-box">
+        <form th:action="@{/admin/recipe/{id}(id=${recipe.id})}"
+              method="post"
+              th:object="${recipe}"
+              enctype="multipart/form-data">
+
+            <div th:if="${#fields.hasGlobalErrors()}">
+                <p th:each="err : ${#fields.globalErrors()}" th:text="${err}" class="error-message"></p>
+            </div>
+
+            <div class="input-group">
+                <label for="name">Nome della Ricetta</label>
+                <input type="text" id="name" th:field="*{title}" required />
+            </div>
+
+            <div class="input-group">
+                <label for="description">Descrizione</label>
+                <textarea id="description" rows="3" th:field="*{description}" required></textarea>
+            </div>
+
+            <div class="input-group">
+                <label for="procedure">Procedimento</label>
+                <textarea id="procedure" rows="6" th:field="*{procedure}"></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>Carica Nuove Immagini</label>
+                <label class="custom-file-upload">
+                    Scegli file...
+                    <input type="file" name="recipeImages" accept="image/*" multiple id="fileInput" />
+                </label>
+                <div id="preview" class="image-preview"></div>
+            </div>
+
+            <div class="input-group" th:if="${recipe.images != null and !recipe.images.isEmpty()}">
+                <label>Immagini Attuali</label>
+                <div class="image-preview">
+                    <div th:each="img : ${recipe.images}" class="image-preview-item">
+                        <img th:src="@{'/uploads/recipe/' + ${recipe.id} + '/' + ${img.path}}" alt="Immagine ricetta" />
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit">Salva modifiche</button>
+        </form>
+    </div>
+
+    <button class="cancel-btn" type="button" onclick="location.href='/admin/recipes'">
+        Annulla
+    </button>
+</main>
+
+<script>
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+    fileInput.addEventListener('change', function () {
+        preview.innerHTML = '';
+        Array.from(fileInput.files).forEach(file => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,461 +1,367 @@
-* {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+/* ==============================
+   CONTENITORE FORM
+   ============================== */
 
-        body {
-            font-family: 'Times New Roman', 'Garamond', 'Georgia', serif;
-            background: linear-gradient(135deg, #2c1810 0%, #3d2817 25%, #4a2f1a 50%, #3d2817 75%, #2c1810 100%);
-            background-attachment: fixed;
-            color: #f4ecd8;
-            width: 100vw;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
+.form-box {
+    background-color: #ffffff;
+    padding: 40px 45px;
+    border-radius: 12px;
+    max-width: 580px;
+    margin: 0 auto;
+    box-shadow: 0 4px 20px rgba(212, 53, 12, 0.08);
+    border: 1px solid #f5e8e0;
+}
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                radial-gradient(circle at 25% 25%, rgba(139, 69, 19, 0.15) 0%, transparent 60%),
-                radial-gradient(circle at 75% 75%, rgba(160, 82, 45, 0.15) 0%, transparent 60%),
-                radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 70%),
-                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><pattern id="oxfordTexture" width="200" height="200" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="2" fill="%23f4ecd8" opacity="0.03"/><circle cx="150" cy="150" r="1.5" fill="%23d4af37" opacity="0.02"/><circle cx="100" cy="20" r="1" fill="%23f4ecd8" opacity="0.04"/><circle cx="20" cy="180" r="1" fill="%23b8941f" opacity="0.02"/></pattern></defs><rect width="200" height="200" fill="url(%23oxfordTexture)"/></svg>');
-            pointer-events: none;
-            z-index: -1;
-            animation: subtleFloat 20s ease-in-out infinite;
-        }
+/* ==============================
+   TITOLO FORM
+   ============================== */
 
-        @keyframes subtleFloat {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            33% { transform: translateY(-10px) rotate(1deg); }
-            66% { transform: translateY(5px) rotate(-0.5deg); }
-        }
+.content h1 {
+    text-align: center;
+    margin-bottom: 32px;
+    color: #d4350c;
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
 
-        .navbar {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem 4rem;
-            background: linear-gradient(180deg, rgba(44, 24, 16, 0.95) 0%, rgba(61, 40, 23, 0.9) 50%, transparent 100%);
-            border-bottom: 3px solid #d4af37;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            position: relative;
-        }
+.content h1::after {
+    content: '';
+    display: block;
+    width: 70px;
+    height: 3px;
+    background-color: #d4350c;
+    margin: 14px auto 0;
+    border-radius: 2px;
+}
 
-        .navbar::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.5), transparent);
-        }
+/* ==============================
+   CAMPI
+   ============================== */
 
-        .logo {
-            width: 25vw;
-            max-width: 400px;
-            filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.5));
-            animation: gentleGlow 4s ease-in-out infinite alternate;
-        }
+.input-group {
+    margin-bottom: 24px;
+}
 
-        @keyframes gentleGlow {
-            0% { filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.5)); }
-            100% { filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 20px rgba(212, 175, 55, 0.3)); }
-        }
+.input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    color: #2c2c2c;
+}
 
-        .logo img {
-            width: 100%;
-            height: auto;
-        }
+.input-group input,
+.input-group textarea,
+.input-group select {
+    width: 100%;
+    padding: 13px 16px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
 
-        .content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: calc(100vh - 160px);
-            padding: 3rem 2rem;
-        }
+.input-group textarea {
+    resize: vertical;
+    min-height: 140px;
+    line-height: 1.6;
+}
 
-        /* Titolo principale sopra il form */
-        .page-title {
-            font-size: 3.5rem;
-            color: #d4af37;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            letter-spacing: 1px;
-            text-align: center;
-            margin-bottom: 2rem;
-            animation: titleGlow 3s ease-in-out infinite alternate;
-        }
+.input-group input:focus,
+.input-group textarea:focus,
+.input-group select:focus {
+    outline: none;
+    border-color: #d4350c;
+    box-shadow: 0 0 0 3px rgba(212, 53, 12, 0.1);
+}
 
-        @keyframes titleGlow {
-            0% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); }
-            100% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.3); }
-        }
+/* Placeholder styling */
+.input-group input::placeholder,
+.input-group textarea::placeholder {
+    color: #999;
+    font-style: italic;
+}
 
-        .form-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 600px;
-        }
+/* ==============================
+   SELECT MULTIPLA (ADMIN)
+   ============================== */
 
-        .form-box {
-            background: linear-gradient(145deg, rgba(44, 24, 16, 0.95) 0%, rgba(61, 40, 23, 0.9) 100%);
-            padding: 3rem;
-            border-radius: 20px;
-            width: 100%;
-            box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(244, 236, 216, 0.1),
-                0 0 0 3px rgba(212, 175, 55, 0.3);
-            border: 2px solid rgba(139, 69, 19, 0.6);
-            position: relative;
-            animation: fadeInUp 1s ease-out;
-            margin-bottom: 2rem;
-        }
+.styled-select {
+    height: 140px;
+    padding: 8px;
+}
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+.styled-select option {
+    padding: 8px;
+    border-radius: 4px;
+    margin: 2px 0;
+}
 
-        .form-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, transparent, #d4af37, #b8941f, #d4af37, transparent);
-            border-radius: 20px 20px 0 0;
-        }
+.styled-select option:checked {
+    background: linear-gradient(0deg, #d4350c 0%, #ff6b35 100%);
+    color: white;
+}
 
-        .form-box::after {
-            content: '📚';
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(145deg, #d4af37 0%, #b8941f 100%);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
+/* ==============================
+   FILE UPLOAD
+   ============================== */
 
-        .input-group {
-            margin-bottom: 1.5rem;
-        }
+.custom-file-upload {
+    display: inline-block;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #fef9f3 0%, #ffffff 100%);
+    border-radius: 8px;
+    border: 2px dashed #d4350c;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #d4350c;
+    transition: all 0.3s ease;
+    text-align: center;
+}
 
-        .input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #d4af37;
-            font-weight: 600;
-            font-size: 1.1rem;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-        }
+.custom-file-upload:hover {
+    background: #fef9f3;
+    border-color: #b92d0a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 53, 12, 0.15);
+}
 
-        .input-group input {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 2px solid rgba(212, 175, 55, 0.4);
-            border-radius: 20px;
-            background: linear-gradient(145deg, rgba(44, 24, 16, 0.6) 0%, rgba(61, 40, 23, 0.6) 100%);
-            color: #f4ecd8;
-            font-size: 1rem;
-            font-family: inherit;
-            transition: all 0.3s ease;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
+.custom-file-upload input[type="file"] {
+    display: none;
+}
 
-        .input-group input:focus {
-            outline: none;
-            border-color: #d4af37;
-            background: linear-gradient(145deg, rgba(44, 24, 16, 0.8) 0%, rgba(61, 40, 23, 0.8) 100%);
-            box-shadow: 
-                inset 0 2px 4px rgba(0, 0, 0, 0.3),
-                0 0 0 3px rgba(212, 175, 55, 0.2);
-            transform: translateY(-2px);
-        }
+/* Icona upload (se presente) */
+.custom-file-upload::before {
+    content: '📁 ';
+    margin-right: 6px;
+}
 
-        .input-group input::placeholder {
-            color: rgba(244, 236, 216, 0.5);
-            font-style: italic;
-        }
+/* ==============================
+   PREVIEW IMMAGINI
+   ============================== */
 
-        .input-group textarea {
-            width: 100%;
-            min-height: 120px;
-            padding: 0.8rem 1rem;
-            border: 2px solid rgba(212, 175, 55, 0.4);
-            border-radius: 20px;
-            background: linear-gradient(145deg, rgba(44, 24, 16, 0.6) 0%, rgba(61, 40, 23, 0.6) 100%);
-            color: #f4ecd8;
-            font-size: 1rem;
-            font-family: inherit;
-            resize: vertical;
-            transition: all 0.3s ease;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
+.image-preview {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
 
-        .input-group textarea:focus {
-            outline: none;
-            border-color: #d4af37;
-            background: linear-gradient(145deg, rgba(44, 24, 16, 0.8) 0%, rgba(61, 40, 23, 0.8) 100%);
-            box-shadow: 
-                inset 0 2px 4px rgba(0, 0, 0, 0.3),
-                0 0 0 3px rgba(212, 175, 55, 0.2);
-            transform: translateY(-2px);
-        }
+.image-preview-item {
+    position: relative;
+    display: inline-block;
+}
 
-        .styled-select {
-            width: 100%;
-            min-height: 120px;
-            padding: 0.8rem 1rem;
-            background: linear-gradient(145deg, rgba(44, 24, 16, 0.6) 0%, rgba(61, 40, 23, 0.6) 100%);
-            color: #f4ecd8;
-            font-size: 1rem;
-            font-family: inherit;
-            border: 2px solid rgba(212, 175, 55, 0.4);
-            border-radius: 20px;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-            outline: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+.image-preview img {
+    width: 110px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #f0f0f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
 
-        .styled-select:focus {
-            border-color: #d4af37;
-            background: linear-gradient(145deg, rgba(44, 24, 16, 0.8) 0%, rgba(61, 40, 23, 0.8) 100%);
-            box-shadow: 
-                inset 0 2px 4px rgba(0, 0, 0, 0.3),
-                0 0 0 3px rgba(212, 175, 55, 0.2);
-            transform: translateY(-2px);
-        }
+.image-preview img:hover {
+    transform: scale(1.05);
+    border-color: #d4350c;
+}
 
-        .styled-select option {
-            background-color: #2c1810;
-            color: #f4ecd8;
-            padding: 0.3rem 0.5rem;
-        }
+/* Bottone rimozione immagine */
+.image-preview-remove {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #d4350c;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
 
-        input[type="date"] {
-            color: #f4ecd8;
-            background: linear-gradient(145deg, rgba(44, 24, 16, 0.6) 0%, rgba(61, 40, 23, 0.6) 100%);
-            border: 2px solid rgba(212, 175, 55, 0.4);
-            border-radius: 20px;
-            padding: 0.8rem 1rem;
-            font-size: 1rem;
-            font-family: inherit;
-            transition: all 0.3s ease;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
+.image-preview-remove:hover {
+    background-color: #b92d0a;
+    transform: scale(1.1);
+}
 
-        input[type="date"]:focus {
-            outline: none;
-            border-color: #d4af37;
-            background: linear-gradient(145deg, rgba(44, 24, 16, 0.8) 0%, rgba(61, 40, 23, 0.8) 100%);
-            box-shadow: 
-                inset 0 2px 4px rgba(0, 0, 0, 0.3),
-                0 0 0 3px rgba(212, 175, 55, 0.2);
-            transform: translateY(-2px);
-        }
+/* ==============================
+   BOTTONI
+   ============================== */
 
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(0.8) sepia(1) saturate(5) hue-rotate(25deg);
-        }
+.form-box button[type="submit"] {
+    width: 100%;
+    margin-top: 16px;
+    padding: 14px;
+    font-size: 1.05rem;
+}
 
-        .input-group input[type="file"] {
-            display: none;
-        }
+/* Bottone secondario nel form */
+.form-box .btn-secondary {
+    margin-top: 10px;
+}
 
-        .custom-file-upload {
-            display: inline-block;
-            padding: 0.8rem 1rem;
-            background: linear-gradient(145deg, rgba(212, 175, 55, 0.3) 0%, rgba(184, 148, 31, 0.3) 100%);
-            color: #f4ecd8;
-            font-size: 1rem;
-            border: 2px solid rgba(212, 175, 55, 0.6);
-            border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
+/* ==============================
+   ANNULLA
+   ============================== */
 
-        .custom-file-upload::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(244, 236, 216, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
+.content > button,
+.cancel-btn {
+    display: block;
+    margin: 24px auto 0;
+    background-color: #777;
+    padding: 12px 28px;
+    width: auto;
+}
 
-        .custom-file-upload:hover::before {
-            left: 100%;
-        }
+.content > button:hover,
+.cancel-btn:hover {
+    background-color: #666;
+}
 
-        .custom-file-upload:hover {
-            color: #d4af37;
-            border-color: #d4af37;
-            background: linear-gradient(145deg, rgba(212, 175, 55, 0.4) 0%, rgba(184, 148, 31, 0.4) 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.2);
-        }
+/* ==============================
+   ERRORI
+   ============================== */
 
-        .image-preview {
-            margin-top: 1rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
+.error-message {
+    color: #d4350c;
+    font-size: 0.9rem;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background-color: #ffeae8;
+    border-radius: 6px;
+    border-left: 3px solid #d4350c;
+}
 
-        .image-preview img {
-            max-width: 120px;
-            max-height: 120px;
-            border-radius: 10px;
-            object-fit: cover;
-            border: 2px solid rgba(212, 175, 55, 0.4);
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
-        }
+.error-message::before {
+    content: '⚠️';
+}
 
-        /* Bottoni */
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            width: 100%;
-            max-width: 600px;
-        }
+/* ==============================
+   HELPER TEXT
+   ============================== */
 
-        button[type="submit"] {
-            width: 100%;
-            background: linear-gradient(145deg, #d4af37 0%, #b8941f 100%);
-            color: #2c1810;
-            border: none;
-            padding: 1rem 2rem;
-            font-size: 1.2rem;
-            font-weight: 700;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: inherit;
-            text-shadow: none;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-        }
+.input-helper {
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 6px;
+    font-style: italic;
+}
 
-        button[type="submit"]::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.6s ease;
-        }
+/* ==============================
+   CARATTERI RIMANENTI
+   ============================== */
 
-        button[type="submit"]:hover::before {
-            left: 100%;
-        }
+.char-counter {
+    text-align: right;
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 6px;
+}
 
-        button[type="submit"]:hover {
-            background: linear-gradient(145deg, #e0c200 0%, #d4af37 100%);
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
-        }
+.char-counter.warning {
+    color: #f39c12;
+}
 
-        button[type="button"] {
-            width: 100%;
-            padding: 0.8rem 2rem;
-            background: linear-gradient(145deg, rgba(212, 175, 55, 0.3) 0%, rgba(184, 148, 31, 0.3) 100%);
-            color: #f4ecd8;
-            font-size: 1rem;
-            border: 2px solid rgba(212, 175, 55, 0.6);
-            border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: inherit;
-            position: relative;
-            overflow: hidden;
-        }
+.char-counter.danger {
+    color: #d4350c;
+    font-weight: 600;
+}
 
-        button[type="button"]::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(244, 236, 216, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
+/* ==============================
+   GRUPPI DI RADIO/CHECKBOX
+   ============================== */
 
-        button[type="button"]:hover::before {
-            left: 100%;
-        }
+.radio-group,
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+}
 
-        button[type="button"]:hover {
-            color: #d4af37;
-            border-color: #d4af37;
-            background: linear-gradient(145deg, rgba(212, 175, 55, 0.4) 0%, rgba(184, 148, 31, 0.4) 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.2);
-        }
+.radio-group label,
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
 
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 1.5rem 2rem;
-            }
-            
-            .logo {
-                width: 40vw;
-            }
+.radio-group label:hover,
+.checkbox-group label:hover {
+    background-color: #fef9f3;
+}
 
-            .page-title {
-                font-size: 2.5rem;
-                margin-bottom: 1.5rem;
-            }
-            
-            .form-box {
-                padding: 2rem;
-                margin: 1rem;
-            }
-            
-            .content {
-                padding: 2rem 1rem;
-            }
-        }
+.radio-group input[type="radio"],
+.checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
+    accent-color: #d4350c;
+}
+
+/* ==============================
+   FORM LOADING STATE
+   ============================== */
+
+.form-loading {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.form-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #d4350c;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* ==============================
+   RESPONSIVE
+   ============================== */
+
+@media (max-width: 768px) {
+    .form-box {
+        padding: 32px 28px;
+    }
+    
+    .content h1 {
+        font-size: 2rem;
+        margin-bottom: 24px;
+    }
+    
+    .image-preview img {
+        width: 90px;
+        height: 75px;
+    }
+}

@@ -1,396 +1,299 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Times New Roman', 'Garamond', 'Georgia', serif;
-  background: linear-gradient(135deg, #2c1810 0%, #3d2817 25%, #4a2f1a 50%, #3d2817 75%, #2c1810 100%);
-  background-attachment: fixed;
-  color: #f4ecd8;
-  width: 100vw;
-  min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    radial-gradient(circle at 15% 25%, rgba(139, 69, 19, 0.12) 0%, transparent 50%),
-    radial-gradient(circle at 85% 75%, rgba(160, 82, 45, 0.12) 0%, transparent 50%),
-    radial-gradient(circle at 50% 10%, rgba(212, 175, 55, 0.06) 0%, transparent 60%),
-    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180"><defs><pattern id="registerTexture" width="180" height="180" patternUnits="userSpaceOnUse"><circle cx="40" cy="40" r="1.5" fill="%23f4ecd8" opacity="0.03"/><circle cx="140" cy="140" r="1.2" fill="%23d4af37" opacity="0.02"/><circle cx="90" cy="20" r="0.8" fill="%23f4ecd8" opacity="0.04"/><circle cx="20" cy="160" r="1" fill="%23b8941f" opacity="0.02"/></pattern></defs><rect width="180" height="180" fill="url(%23registerTexture)"/></svg>');
-  pointer-events: none;
-  z-index: -1;
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 4rem;
-  background: linear-gradient(180deg, rgba(44, 24, 16, 0.95) 0%, rgba(61, 40, 23, 0.9) 100%);
-  border-bottom: 3px solid #d4af37;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-}
-
-.logo {
-  width: 17vw;
-  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
-}
-
-.logo img {
-  width: 100%;
-  height: auto;
-}
-
-.nav-links {
-  display: flex;
-  gap: 2rem;
-  list-style: none;
-}
-
-.nav-links a {
-  color: #f4ecd8;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1.1rem;
-  padding: 0.6rem 1.2rem;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-  position: relative;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.nav-links a::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #d4af37, transparent);
-  transition: all 0.3s ease;
-  transform: translateX(-50%);
-}
-
-.nav-links a:hover::before {
-  width: 100%;
-}
-
-.nav-links a:hover {
-  color: #d4af37;
-  background: rgba(212, 175, 55, 0.1);
-  transform: translateY(-2px);
-}
+/* ==============================
+   REGISTER PAGE
+   ============================== */
 
 .content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 3rem 2rem;
-  min-height: auto;
+    max-width: 720px;
+    margin: 50px auto;
+    padding: 20px;
 }
+
+/* Variante con background per register */
+.register-page {
+    background: linear-gradient(135deg, #fef9f3 0%, #ffffff 100%);
+    min-height: calc(100vh - 140px);
+    padding: 60px 20px;
+}
+
+/* ==============================
+   TITOLO
+   ============================== */
 
 .content h1 {
-  font-size: 3rem;
-  margin-bottom: 2rem;
-  color: #d4af37;
-  font-weight: 700;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  letter-spacing: 1px;
-  text-align: center;
-  animation: titleFadeIn 1s ease-out;
+    text-align: center;
+    margin-bottom: 36px;
+    color: #d4350c;
+    font-size: 2.6rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
-@keyframes titleFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.content h1::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 3px;
+    background-color: #d4350c;
+    margin: 16px auto 0;
+    border-radius: 2px;
 }
+
+/* ==============================
+   FORM
+   ============================== */
 
 .form-box {
-  background: linear-gradient(145deg, rgba(44, 24, 16, 0.95) 0%, rgba(61, 40, 23, 0.9) 100%);
-  padding: 3rem;
-  border-radius: 20px;
-  max-width: 500px;
-  width: 100%;
-  box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(244, 236, 216, 0.1),
-    0 0 0 3px rgba(212, 175, 55, 0.3);
-  border: 2px solid rgba(139, 69, 19, 0.6);
-  position: relative;
-  animation: boxFadeIn 1.2s ease-out;
-  margin-bottom: 2rem;
+    max-width: 580px;
+    margin: 0 auto;
+    padding: 44px 48px;
 }
 
-@keyframes boxFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+/* Griglia per campi affiancati */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
-.form-box::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background: linear-gradient(90deg, transparent, #d4af37, #b8941f, #d4af37, transparent);
-  border-radius: 20px 20px 0 0;
+.form-row .input-group {
+    margin-bottom: 0;
 }
 
-.form-box::after {
-  content: '📝';
-  position: absolute;
-  top: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: linear-gradient(145deg, #d4af37 0%, #b8941f 100%);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+/* Input specifici per register */
+.form-box .input-group input,
+.form-box .input-group select,
+.form-box .input-group textarea {
+    font-size: 1rem;
+    padding: 14px 16px;
 }
 
-.input-group {
-  margin-bottom: 1.5rem;
+/* Bottone submit */
+.form-box button[type="submit"] {
+    width: 100%;
+    margin-top: 20px;
+    padding: 16px;
+    font-size: 1.1rem;
+    letter-spacing: 0.3px;
 }
 
-.input-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #d4af37;
-  font-weight: 600;
-  font-size: 1.1rem;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+/* ==============================
+   CHECKBOX E RADIO
+   ============================== */
+
+.checkbox-group,
+.radio-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 16px 0;
 }
 
-.input-group input {
-  width: 100%;
-  padding: 0.8rem 1.2rem;
-  border: 2px solid rgba(212, 175, 55, 0.4);
-  border-radius: 10px;
-  background: linear-gradient(145deg, rgba(44, 24, 16, 0.6) 0%, rgba(61, 40, 23, 0.6) 100%);
-  color: #f4ecd8;
-  font-size: 1rem;
-  font-family: inherit;
-  transition: all 0.3s ease;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+.checkbox-group input[type="checkbox"],
+.radio-group input[type="radio"] {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
+    accent-color: #d4350c;
 }
 
-.input-group input:focus {
-  outline: none;
-  border-color: #d4af37;
-  background: linear-gradient(145deg, rgba(44, 24, 16, 0.8) 0%, rgba(61, 40, 23, 0.8) 100%);
-  box-shadow: 
-    inset 0 2px 4px rgba(0, 0, 0, 0.3),
-    0 0 0 3px rgba(212, 175, 55, 0.2);
-  transform: translateY(-2px);
+.checkbox-group label,
+.radio-group label {
+    margin: 0;
+    font-weight: 400;
+    cursor: pointer;
+    user-select: none;
 }
 
-.input-group input::placeholder {
-  color: rgba(244, 236, 216, 0.5);
-  font-style: italic;
+/* ==============================
+   TERMINI E CONDIZIONI
+   ============================== */
+
+.terms {
+    margin-top: 20px;
+    padding: 16px;
+    background-color: #fef9f3;
+    border-radius: 8px;
+    border-left: 3px solid #d4350c;
 }
 
-/* Error message styling */
-.error-message {
-  display: block;
-  margin-top: 0.5rem;
+.terms label {
+    display: flex;
+    align-items: start;
+    gap: 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
 }
 
-.error-message p {
-  color: #ff6b6b;
-  background: linear-gradient(145deg, rgba(255, 107, 107, 0.15) 0%, rgba(220, 50, 50, 0.15) 100%);
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 107, 107, 0.3);
-  font-size: 0.9rem;
-  font-weight: 500;
-  text-align: center;
-  margin: 0;
-  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.2);
+.terms input[type="checkbox"] {
+    margin-top: 3px;
+    flex-shrink: 0;
 }
 
-button[type="submit"] {
-  width: 100%;
-  background: linear-gradient(145deg, #d4af37 0%, #b8941f 100%);
-  color: #2c1810;
-  border: none;
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
-  font-weight: 700;
-  border-radius: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: inherit;
-  text-shadow: none;
-  margin-top: 1rem;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+.terms a {
+    color: #d4350c;
+    font-weight: 600;
+    text-decoration: none;
 }
 
-button[type="submit"]::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.6s ease;
+.terms a:hover {
+    text-decoration: underline;
 }
 
-button[type="submit"]:hover::before {
-  left: 100%;
-}
+/* ==============================
+   LINK LOGIN
+   ============================== */
 
-button[type="submit"]:hover {
-  background: linear-gradient(145deg, #e0c200 0%, #d4af37 100%);
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
-}
-
-/* Container login section */
 .container-login {
-  background: linear-gradient(145deg, rgba(61, 40, 23, 0.9) 0%, rgba(44, 24, 16, 0.85) 100%);
-  padding: 2.5rem;
-  border-radius: 20px;
-  max-width: 450px;
-  width: 100%;
-  margin: 0 auto 3rem;
-  text-align: center;
-  box-shadow: 
-    0 15px 45px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(244, 236, 216, 0.1),
-    0 0 0 2px rgba(212, 175, 55, 0.2);
-  border: 2px solid rgba(139, 69, 19, 0.4);
-  position: relative;
-  animation: containerFadeIn 1.5s ease-out;
-}
-
-@keyframes containerFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.container-login::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.6), transparent);
-  border-radius: 20px 20px 0 0;
+    text-align: center;
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 2px solid #f5e8e0;
 }
 
 .container-login h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  color: #d4af37;
-  font-weight: 600;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+    color: #2c2c2c;
+    font-weight: 600;
 }
 
 .container-login p {
-  font-size: 1.1rem;
-  margin-bottom: 1.5rem;
-  color: #f4ecd8;
-  line-height: 1.5;
+    color: #666;
+    margin-bottom: 16px;
+    font-size: 1rem;
 }
 
-.register-btn {
-  background: linear-gradient(145deg, rgba(212, 175, 55, 0.3) 0%, rgba(184, 148, 31, 0.3) 100%);
-  color: #f4ecd8;
-  border: 2px solid rgba(212, 175, 55, 0.6);
-  padding: 0.8rem 2.5rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: inherit;
-  position: relative;
-  overflow: hidden;
+.container-login a {
+    color: #d4350c;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 10px 24px;
+    border: 2px solid #d4350c;
+    border-radius: 8px;
+    display: inline-block;
+    transition: all 0.3s ease;
 }
 
-.register-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(244, 236, 216, 0.2), transparent);
-  transition: left 0.5s ease;
+.container-login a:hover {
+    background-color: #d4350c;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 53, 12, 0.2);
 }
 
-.register-btn:hover::before {
-  left: 100%;
+/* ==============================
+   PROGRESS INDICATOR (opzionale)
+   ============================== */
+
+.register-steps {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 40px;
 }
 
-.register-btn:hover {
-  color: #d4af37;
-  border-color: #d4af37;
-  background: linear-gradient(145deg, rgba(212, 175, 55, 0.4) 0%, rgba(184, 148, 31, 0.4) 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.2);
+.register-steps .step {
+    width: 40px;
+    height: 4px;
+    background-color: #e0e0e0;
+    border-radius: 2px;
+    transition: background-color 0.3s ease;
 }
 
-/* Responsive design */
+.register-steps .step.active {
+    background-color: #d4350c;
+}
+
+/* ==============================
+   SUCCESS MESSAGE
+   ============================== */
+
+.register-success {
+    text-align: center;
+    padding: 40px;
+    background-color: #d5f4e6;
+    border-radius: 12px;
+    border-left: 4px solid #27ae60;
+    margin-top: 24px;
+}
+
+.register-success h3 {
+    color: #27ae60;
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+}
+
+.register-success p {
+    color: #555;
+    font-size: 1rem;
+}
+
+/* ==============================
+   PASSWORD STRENGTH INDICATOR
+   ============================== */
+
+.password-strength {
+    margin-top: 8px;
+    height: 4px;
+    background-color: #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.password-strength-bar {
+    height: 100%;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.password-strength-bar.weak {
+    width: 33%;
+    background-color: #e74c3c;
+}
+
+.password-strength-bar.medium {
+    width: 66%;
+    background-color: #f39c12;
+}
+
+.password-strength-bar.strong {
+    width: 100%;
+    background-color: #27ae60;
+}
+
+.password-hint {
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 6px;
+}
+
+/* ==============================
+   RESPONSIVE
+   ============================== */
+
 @media (max-width: 768px) {
-  .navbar {
-    padding: 0 2rem;
-  }
-  
-  .logo {
-    width: 25vw;
-  }
-  
-  .content h1 {
-    font-size: 2.2rem;
-  }
-  
-  .form-box,
-  .container-login {
-    padding: 2rem;
-    margin: 1rem;
-  }
-  
-  .content {
-    padding: 2rem 1rem;
-  }
+    .content {
+        margin: 30px auto;
+    }
+    
+    .content h1 {
+        font-size: 2.2rem;
+        margin-bottom: 28px;
+    }
+    
+    .form-box {
+        padding: 32px 28px;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .form-row .input-group {
+        margin-bottom: 18px;
+    }
+    
+    .container-login h2 {
+        font-size: 1.2rem;
+    }
 }

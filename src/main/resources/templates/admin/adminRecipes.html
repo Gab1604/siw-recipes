@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Ricette - Admin</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/recipes.css">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">
+        <a href="/indexAdmin">
+            <img src="/images/logo_siw_recipes.png" alt="Logo">
+        </a>
+    </div>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="/indexAdmin">Home</a></li>
+            <li><a href="/admin/account">Account</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="content">
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h1>Gestione Ricette</h1>
+        <a href="/admin/recipes/new" class="action-btn">➕ Nuova ricetta</a>
+    </div>
+
+    <div class="recipes-filters">
+        <form th:action="@{/admin/recipes/search}" method="get">
+            <input type="search" name="query"
+                   placeholder="Cerca ricetta da gestire..." required>
+            <button type="submit">Cerca</button>
+        </form>
+    </div>
+
+    <div class="no-recipes" th:if="${recipes == null or recipes.isEmpty()}">
+        <p>Nessuna ricetta presente.</p>
+        <a href="/admin/recipes/new" class="btn-secondary">Aggiungine una ora</a>
+    </div>
+
+    <section class="recipes">
+
+        <div class="recipe-card" th:each="recipe : ${recipes}">
+            <a th:href="@{'/admin/recipes/' + ${recipe.id}}">
+
+                <!-- IMMAGINE -->
+                <img class="recipe-image"
+                     th:if="${recipe.images != null and !recipe.images.isEmpty()}"
+                     th:src="${recipe.images[0].path}"
+                     alt="Immagine ricetta"/>
+
+                <img class="recipe-image"
+                     th:if="${recipe.images == null or recipe.images.isEmpty()}"
+                     src="/images/recipe-placeholder.png"
+                     alt="Nessuna immagine"/>
+
+                <div class="recipe-info">
+                    <h2 th:text="${recipe.title}">Titolo</h2>
+                    <p th:text="${recipe.description}">Descrizione</p>
+                </div>
+
+            </a>
+        </div>
+
+    </section>
+
+</main>
+</body>
+</html>

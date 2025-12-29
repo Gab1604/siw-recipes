@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="it"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${recipe != null} ? ${recipe.title} : 'Ricetta non trovata'">Dettaglio Ricetta</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/recipe.css">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">
+        <a href="/"><img src="/images/logo_siw_recipes.png" alt="Logo SIW Recipes"></a>
+    </div>
+
+    <nav>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/recipes">Ricette</a></li>
+
+            <!-- Login / Logout -->
+            <li sec:authorize="isAnonymous()">
+                <a href="/login">Login</a>
+            </li>
+
+            <li sec:authorize="isAuthenticated()">
+                <a href="/logout">Logout</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<main class="content">
+
+    <div class="recipe" th:if="${recipe}">
+
+        <h1 th:text="${recipe.title}">Nome Ricetta</h1>
+
+        <!-- Badge ADMIN -->
+        <div sec:authorize="hasAuthority('ADMIN')">
+            <span class="badge-admin">ADMIN</span>
+        </div>
+
+        <!-- IMMAGINE -->
+        <img class="recipe-main-image"
+             th:if="${recipe.images != null and !recipe.images.isEmpty()}"
+             th:src="${recipe.images[0].path}"
+             alt="Immagine ricetta">
+
+        <img class="recipe-main-image"
+             th:if="${recipe.images == null or recipe.images.isEmpty()}"
+             src="/images/recipe-placeholder.png"
+             alt="Nessuna immagine disponibile">
+
+        <div class="recipe-description"
+             th:text="${recipe.description}">
+            Descrizione
+        </div>
+
+        <section class="recipe-section">
+            <h2>Procedimento</h2>
+            <p th:text="${recipe.procedure}">Procedimento</p>
+        </section>
+
+        <!-- AZIONI AUTORE / ADMIN -->
+        <div class="recipe-actions"
+             th:if="${user != null and 
+                    (recipe.author.username == user.username 
+                     or user.credentials.role == 'ADMIN')}">
+
+            <a th:href="@{'/recipes/edit/' + ${recipe.id}}"
+               class="btn-warning">
+                ✏️ Modifica
+            </a>
+
+            <a th:href="@{'/recipes/delete/' + ${recipe.id}}"
+               class="btn-danger"
+               onclick="return confirm('Sei sicuro di voler eliminare questa ricetta?')">
+                🗑️ Elimina
+            </a>
+        </div>
+
+        <!-- AZIONI GENERICHE -->
+        <div class="recipe-actions">
+            <a href="/recipes" class="btn-secondary">Torna alle ricette</a>
+        </div>
+
+    </div>
+
+    <div class="error-message" th:unless="${recipe}">
+        <h3>Ricetta non trovata</h3>
+        <a href="/recipes" class="btn-secondary">Torna alla lista</a>
+    </div>
+
+</main>
+
+</body>
+</html>

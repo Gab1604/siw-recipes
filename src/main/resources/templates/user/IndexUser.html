@@ -1,38 +1,114 @@
-
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Utente - SIW Recipes</title>
+
+    <link rel="stylesheet" href="/css/base.css">
     <link rel="stylesheet" href="/css/index.css">
-    <title>Index</title>
+    <link rel="stylesheet" href="/css/recipes.css">
 </head>
+
 <body>
-  <header class="navbar">
+
+<header class="navbar">
     <div class="logo">
-      <img src="/images/logo_siw_books.png" alt="Logo SIW Books" />
+        <a href="/indexUser">
+            <img src="/images/logo_siw_recipes.png" alt="Logo SIW Recipes">
+        </a>
     </div>
-     <nav>
+
+    <nav>
         <ul class="nav-links">
+            <li><a href="/indexUser">Home</a></li>
+            <li><a href="/user/recipes">Ricette</a></li>
             <li><a href="/user/account">Account</a></li>
-			</div>
-			</div>
-            <li><a href="/logout">Logout</a></li>
+
+            <li sec:authorize="hasAuthority('ADMIN')">
+                <a href="/admin">Admin</a>
+            </li>
+
+            <li sec:authorize="isAuthenticated()">
+                <a href="/logout">Logout</a>
+            </li>
         </ul>
-      </nav>
-  </header>
-  <div class="content">
-    <div class="form-box">
-      <h1>Benvenuto in SIW Books!</h1>
+    </nav>
+</header>
 
-      <div class="actions">
-        <h3>📖 Scopri la nostra collezione di libri</h3>
-        <button class="action-btn" onclick="location.href='/user/book'">Libri</button>
+<main class="home-container">
 
-        <h3>✍️ Conosci i nostri autori</h3>
-        <button class="action-btn" onclick="location.href='/user/author'">Autori</button>
-      </div>
-    </div>
-  </div>
+    <!-- HERO -->
+    <section class="hero">
+        <h1>Benvenuto in SIW Recipes!</h1>
+        <h3>Esplora nuove ricette e condividi la tua opinione.</h3>
+
+        <!-- Badge ADMIN -->
+        <div sec:authorize="hasAuthority('ADMIN')">
+            <span class="badge-admin">ADMIN</span>
+        </div>
+
+        <div class="actions">
+            <div class="action-section">
+                <h3>🍝 Scopri le ricette</h3>
+                <p style="color:#666; margin-bottom:12px;">
+                    Sfoglia il catalogo completo e lasciati ispirare.
+                </p>
+
+                <button class="action-btn" onclick="location.href='/user/recipes'">
+                    Vai alle ricette
+                </button>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ULTIME RICETTE -->
+    <section style="margin-top:70px;">
+
+        <h2 style="text-align:center; margin-bottom:30px;">
+            🍽️ Ultime ricette aggiunte
+        </h2>
+
+        <div class="recipes">
+
+            <div class="recipe-card"
+                 th:each="recipe : ${latestRecipes}">
+
+                <a th:href="@{'/recipes/' + ${recipe.id}}">
+
+                    <img class="recipe-image"
+                         th:if="${recipe.images != null and !recipe.images.isEmpty()}"
+                         th:src="${recipe.images[0].path}"
+                         alt="Immagine ricetta">
+
+                    <img class="recipe-image"
+                         th:if="${recipe.images == null or recipe.images.isEmpty()}"
+                         src="/images/recipe-placeholder.png"
+                         alt="Nessuna immagine">
+
+                    <div class="recipe-info">
+                        <h2 th:text="${recipe.title}">Titolo</h2>
+                        <p th:text="${recipe.description}">Descrizione</p>
+                    </div>
+
+                </a>
+            </div>
+
+        </div>
+
+        <div style="text-align:center; margin-top:30px;">
+            <a href="/user/recipes" class="btn-secondary">
+                Mostra tutte le ricette →
+            </a>
+        </div>
+
+    </section>
+
+</main>
+
 </body>
 </html>

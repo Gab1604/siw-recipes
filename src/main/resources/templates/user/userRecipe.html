@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${recipe.title}">Dettaglio Ricetta</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/recipe.css">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">
+        <a href="/indexUser">
+            <img src="/images/logo_siw_recipes.png" alt="Logo">
+        </a>
+    </div>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="/indexUser">Home</a></li>
+            <li><a href="/user/recipes">Ricette</a></li>
+            <li><a href="/user/account">Account</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="content">
+
+<div class="recipe" th:if="${recipe}">
+
+    <h1 th:text="${recipe.title}">Nome Ricetta</h1>
+
+    <!-- IMMAGINE -->
+    <img class="recipe-main-image"
+         th:if="${recipe.images != null and !recipe.images.isEmpty()}"
+         th:src="${recipe.images[0].path}"
+         alt="Immagine ricetta">
+
+    <img class="recipe-main-image"
+         th:if="${recipe.images == null or recipe.images.isEmpty()}"
+         src="/images/recipe-placeholder.png"
+         alt="Nessuna immagine disponibile">
+
+    <div class="recipe-description"
+         th:text="${recipe.description}">
+        Descrizione...
+    </div>
+
+    <section class="recipe-section">
+        <h2>Procedimento</h2>
+        <p th:text="${recipe.procedure}">Procedimento...</p>
+    </section>
+
+    <!-- =========================
+         RECENSIONI
+         ========================= -->
+    <section class="reviews">
+
+        <h3>Recensioni</h3>
+
+        <!-- Nessuna recensione -->
+        <div class="no-reviews"
+             th:if="${reviews == null or reviews.isEmpty()}">
+            <p>Nessuna recensione presente.</p>
+        </div>
+
+        <!-- Lista recensioni -->
+        <div class="review-card"
+             th:each="review : ${reviews}">
+
+            <h4 th:text="${review.title}">
+                Titolo recensione
+            </h4>
+
+            <div class="review-rating">
+                ⭐ <span th:text="${review.rating}">5</span>/5
+            </div>
+
+            <p th:text="${review.text}">
+                Testo recensione
+            </p>
+
+            <small class="review-author">
+                di
+                <span th:text="${review.user.credentials.username}">
+                    username
+                </span>
+            </small>
+
+        </div>
+
+        <!-- Azioni -->
+        <div class="recipe-actions" style="margin-top: 30px;">
+            <a th:href="@{'/user/recipes/' + ${recipe.id} + '/addReview'}"
+               class="action-btn">
+                📝 Scrivi una recensione
+            </a>
+
+            <a href="/user/recipes" class="btn-secondary">
+                Indietro
+            </a>
+        </div>
+
+    </section>
+
+</div>
+
+</main>
+</body>
+</html>

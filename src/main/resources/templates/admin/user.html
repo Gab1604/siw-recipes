@@ -1,39 +1,88 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Admin</title>
+
+    <link rel="stylesheet" href="/css/base.css">
     <link rel="stylesheet" href="/css/account.css">
-    <title>Account</title>
 </head>
+
 <body>
-    <header class="navbar">
-        <div class="logo">
-            <img src="/images/logo_siw_books.png" alt="Logo SIW Books">
+
+<header class="navbar">
+    <div class="logo">
+        <a href="/indexAdmin">
+            <img src="/images/logo_siw_recipes.png" alt="Logo SIW Recipes">
+        </a>
+    </div>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="/indexAdmin">Home</a></li>
+            <li><a href="/admin/recipes">Ricette</a></li>
+            <li><a href="/admin/account">Account</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="content">
+
+    <div class="account">
+        <h2>Dettagli Amministratore</h2>
+
+        <div class="account-avatar">
+            <div class="avatar-placeholder">
+                <span th:text="${#strings.substring(credentials.username,0,1)}">A</span>
+            </div>
         </div>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="/indexAdmin">Home</a></li>
-                <li><a href="/admin/book">Libri</a></li>
-                <li><a href="/admin/author">Autori</a></li>
-                <li><a href="/admin/account">Account</a></li>
-                <li><a href="/logout">Logout</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section class="account">
-            <h2>Dettagli Account</h2>
-            <p>Username: <span th:text="${credentials.username}">username</span></p>
-            <p>Ruolo: <span th:text="${credentials.role}">Ruolo</span></p>
-        </section>
-        <section class="actions">
-            <h3>Azioni</h3>
-            <a th:href="@{/admin/modificaAccount}" class="link-button">Modifica Account</a>
-            <form th:action="@{'/admin/deleteAccount/' + ${credentials.id}}" method="post" class="inline-form">
-                <button type="submit" class="link-button">Elimina Account</button>
+
+        <div class="account-info">
+            <p>
+                <strong>Username:</strong>
+                <span class="value" th:text="${credentials.username}">username</span>
+            </p>
+
+            <p>
+                <strong>Ruolo:</strong>
+                <span class="role-badge admin" th:text="${credentials.role}">ADMIN</span>
+            </p>
+            
+            <p th:if="${credentials.user}">
+                <strong>Nome completo:</strong>
+                <span class="value" th:text="${credentials.user.name} + ' ' + ${credentials.user.surname}">Nome Cognome</span>
+            </p>
+             <p th:if="${credentials.user}">
+                <strong>Email:</strong>
+                <span class="value" th:text="${credentials.user.email}">email</span>
+            </p>
+        </div>
+    </div>
+
+    <div class="actions">
+        <h3>Gestione Profilo</h3>
+
+        <div class="action-group">
+            <a th:href="@{/admin/modificaAccount}" class="action-btn">
+                ✏️ Modifica credenziali
+            </a>
+        </div>
+
+        <div class="danger-zone">
+            <h3>Eliminazione Account</h3>
+            <p>Attenzione: eliminando il tuo account amministratore perderai l'accesso al pannello di controllo.</p>
+            
+            <form th:action="@{'/admin/deleteAccount/' + ${credentials.id}}"
+                  method="post">
+                <button type="submit">
+                    🗑️ Elimina account
+                </button>
             </form>
-        </section>
-    </main>
+        </div>
+    </div>
+
+</main>
+
 </body>
 </html>

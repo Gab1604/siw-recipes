@@ -1,39 +1,118 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Il tuo Account</title>
+
+    <link rel="stylesheet" href="/css/base.css">
     <link rel="stylesheet" href="/css/account.css">
-    <title>Account</title>
 </head>
+
 <body>
-    <header class="navbar">
-        <div class="logo">
-            <img src="/images/logo_siw_books.png" alt="Logo SIW Books">
+
+<header class="navbar">
+    <div class="logo">
+        <a href="/indexUser">
+            <img src="/images/logo_siw_recipes.png" alt="Logo SIW Recipes">
+        </a>
+    </div>
+
+    <nav>
+        <ul class="nav-links">
+            <li><a href="/indexUser">Home</a></li>
+            <li><a href="/user/recipes">Ricette</a></li>
+            <li><a href="/user/account">Account</a></li>
+
+            <li sec:authorize="isAuthenticated()">
+                <a href="/logout">Logout</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<main class="content">
+
+    <!-- Accesso solo a utenti autenticati -->
+    <div class="account" sec:authorize="isAuthenticated()">
+        <h2>Dettagli account</h2>
+
+        <div class="account-avatar">
+            <div class="avatar-placeholder">
+                <span th:text="${#strings.substring(credentials.user.name,0,1)}">U</span>
+            </div>
         </div>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="/indexUser">Home</a></li>
-                <li><a href="/user/book">Libri</a></li>
-                <li><a href="/user/author">Autori</a></li>
-                <li><a href="/user/account">Account</a></li>
-                <li><a href="/logout">Logout</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section class="account">
-            <h2>Dettagli Account</h2>
-            <p>Username: <span th:text="${credentials.username}">username</span></p>
-            <p>Ruolo: <span th:text="${credentials.role}">Ruolo</span></p>
-        </section>
-        <section class="actions">
-            <h3>Azioni</h3>
-            <a th:href="@{/user/modificaAccount}" class="link-button">Modifica Account</a>
-            <form th:action="@{'/user/deleteAccount/' + ${credentials.id}}" method="post" class="inline-form">
-                <button type="submit" class="link-button">Elimina Account</button>
+
+        <div class="account-info">
+            <p>
+                <strong>Nome completo:</strong>
+                <span class="value"
+                      th:text="${credentials.user.name} + ' ' + ${credentials.user.surname}">
+                    Nome Cognome
+                </span>
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+                <span class="value" th:text="${credentials.user.email}">
+                    email@example.com
+                </span>
+            </p>
+
+            <p>
+                <strong>Username:</strong>
+                <span class="value" th:text="${credentials.username}">
+                    username
+                </span>
+            </p>
+
+            <p>
+                <strong>Ruolo:</strong>
+
+                <span class="role-badge admin"
+                      th:if="${credentials.role == 'ADMIN'}">
+                    ADMIN
+                </span>
+
+                <span class="role-badge user"
+                      th:if="${credentials.role == 'USER'}">
+                    USER
+                </span>
+            </p>
+        </div>
+    </div>
+
+    <div class="actions" sec:authorize="isAuthenticated()">
+        <h3>Gestione Profilo</h3>
+
+        <div class="action-group">
+            <h4>Modifica i tuoi dati</h4>
+            <a th:href="@{/user/modificaAccount}" class="action-btn">
+                ✏️ Modifica Dati Account
+            </a>
+        </div>
+
+        <div class="danger-zone">
+            <h3>Zona Pericolosa</h3>
+            <p>
+                L'eliminazione dell'account è irreversibile.
+                Tutte le tue ricette e recensioni verranno perse.
+            </p>
+
+            <form th:action="@{'/user/deleteAccount/' + ${credentials.id}}"
+                  method="post"
+                  onsubmit="return confirm('Sei sicuro di voler eliminare definitivamente il tuo account?');">
+                <button type="submit">
+                    🗑️ Elimina account definitivamente
+                </button>
             </form>
-        </section>
-    </main>
+        </div>
+    </div>
+
+</main>
+
 </body>
 </html>

@@ -1,66 +1,51 @@
-
 package it.uniroma3.siw.service;
-
 
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import it.uniroma3.siw.model.*;
-import it.uniroma3.siw.repository.*;
-
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-
-
-import org.springframework.security.authentication.AuthenticationManager;
+import it.uniroma3.siw.model.Credentials;
+import it.uniroma3.siw.model.User;
+import it.uniroma3.siw.repository.CredentialsRepository;
+import it.uniroma3.siw.repository.UserRepository;
 
 @Service
 public class CredentialsService {
 
     @Autowired
-    protected PasswordEncoder passwordEncoder;
+    private CredentialsRepository credentialsRepository;
 
     @Autowired
-    protected CredentialsRepository credentialsRepository;
-    @Autowired
-    protected AuthenticationManager authenticationManager;
-    @Autowired
-    protected UserRepository userRepository;
+    private UserRepository userRepository;
 
-    public void autoLogin(String username, String rawPassword) {
-        UsernamePasswordAuthenticationToken token =
-            new UsernamePasswordAuthenticationToken(username, rawPassword);
-        
-        Authentication auth = authenticationManager.authenticate(token);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-        if (auth.isAuthenticated()) {
-            SecurityContextHolder.getContext().setAuthentication(auth);
-        }
-    }
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    /* =======================
+       CRUD
+       ======================= */
 
     @Transactional
     public Credentials getCredentials(Long id) {
-        Optional<Credentials> result = this.credentialsRepository.findById(id);
+        Optional<Credentials> result = credentialsRepository.findById(id);
         return result.orElse(null);
     }
 
     @Transactional
     public Credentials getCredentials(String username) {
-        Optional<Credentials> result = this.credentialsRepository.findByUsername(username);
+        Optional<Credentials> result = credentialsRepository.findByUsername(username);
         return result.orElse(null);
-    }
-
-    @Transactional
-    public Credentials saveCredentials(Credentials credentials) {
-        credentials.setRole(Credentials.DEFAULT_ROLE);
-        credentials.setPassword(this.passwordEncoder.encode(credentials.getPassword()));
-        return this.credentialsRepository.save(credentials);
     }
 
     @Transactional
@@ -69,16 +54,24 @@ public class CredentialsService {
     }
 
     @Transactional
-    public Credentials getCurrentCredentials() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = authentication.getPrincipal();
+    public Credentials saveCredentials(Credentials credentials) {
+        credentials.setPassword(passwordEncoder.encode(credentials.getPassword()));
+        return credentialsRepository.save(credentials);
+    }
 
-        if (principal instanceof UserDetails userDetails) {
-            String username = userDetails.getUsername();
-            Credentials credentials = this.getCredentials(username);
-            return credentials;
+    @Transactional
+    public void updateCredentials(Credentials credentials) {
+        Credentials existing = this.getCredentials(credentials.getId());
+        if (existing != null) {
+            existing.setUsername(credentials.getUsername());
+
+            if (credentials.getPassword() != null && !credentials.getPassword().isBlank()) {
+                existing.setPassword(passwordEncoder.encode(credentials.getPassword()));
+            }
+
+            existing.setRole(credentials.getRole());
+            credentialsRepository.save(existing);
         }
-        return null;
     }
 
     @Transactional
@@ -94,26 +87,30 @@ public class CredentialsService {
         }
     }
 
+    /* =======================
+       CURRENT USER
+       ======================= */
 
     @Transactional
-    public void updateCredentials(Credentials credentials) {
-        Credentials existingCredentials = this.getCredentials(credentials.getId());
-        if (existingCredentials != null) {
-            existingCredentials.setUsername(credentials.getUsername());
+    public Credentials getCurrentCredentials() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
 
-            if (credentials.getPassword() != null && !credentials.getPassword().isBlank()) {
-                existingCredentials.setPassword(this.passwordEncoder.encode(credentials.getPassword()));
-            }
-
-            existingCredentials.setRole(credentials.getRole());
-
-          
-            if (existingCredentials.getUser() != null) {
-                existingCredentials.getUser().setCredentials(existingCredentials);
-            }
-
-            this.credentialsRepository.save(existingCredentials);
+        if (principal instanceof UserDetails userDetails) {
+            return this.getCredentials(userDetails.getUsername());
         }
+        return null;
     }
 
+    /* =======================
+       AUTO LOGIN
+       ======================= */
+
+    public void autoLogin(String username, String password) {
+        UsernamePasswordAuthenticationToken token =
+                new UsernamePasswordAuthenticationToken(username, password);
+
+        Authentication auth = authenticationManager.authenticate(token);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+    }
 }

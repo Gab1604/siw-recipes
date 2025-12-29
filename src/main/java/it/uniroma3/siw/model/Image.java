@@ -1,4 +1,3 @@
-
 package it.uniroma3.siw.model;
 
 import jakarta.persistence.Entity;
@@ -6,7 +5,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 
 @Entity
 public class Image {
@@ -18,12 +16,7 @@ public class Image {
     private String path;    // Path to the image file
 
     @ManyToOne
-    private Book book; // The book this image belongs to
-
-    @OneToOne
-    private Author author; // The author this image belongs to
-
-    
+    private Recipe recipe; // The recipe this image belongs to
 
     public Long getId() {
         return id;
@@ -41,20 +34,12 @@ public class Image {
         this.path = path;
     }
 
-    public Book getBook() {
-        return book;
+    public Recipe getRecipe() {
+        return recipe;
     }
 
-    public void setBook(Book book) {
-        this.book = book;
-    }
-
-    public Author getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Author author) {
-        this.author = author;
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
     
     @Override
@@ -81,5 +66,4 @@ public class Image {
             return false;
         return true;
     }
-
 }

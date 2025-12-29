@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="it"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Nostre Ricette</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/recipes.css">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">
+        <a href="/"><img src="/images/logo_siw_recipes.png" alt="Logo SIW Recipes"></a>
+    </div>
+
+    <nav>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/recipes">Ricette</a></li>
+
+            <li sec:authorize="isAnonymous()">
+                <a href="/login">Login</a>
+            </li>
+
+            <li sec:authorize="isAuthenticated()">
+                <a href="/logout">Logout</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<main class="content">
+
+    <h1 class="page-title">Le nostre ricette</h1>
+    <p class="page-subtitle">
+        Scopri e cerca tra le migliori ricette della community
+    </p>
+    
+    <!-- Badge ADMIN -->
+    <div class="admin-badge" sec:authorize="hasAuthority('ADMIN')">
+        <span class="badge-admin">ADMIN</span>
+    </div>
+
+    <div class="recipes-filters">
+        <form method="get" th:action="@{/recipes/search}">
+            <input type="search"
+                   list="recipe-suggestions"
+                   name="query"
+                   placeholder="Cerca una ricetta..."
+                   autocomplete="off"
+                   required>
+
+            <datalist id="recipe-suggestions">
+                <option th:each="r : ${recipes}" th:value="${r.title}">
+                    [[${r.title}]]
+                </option>
+            </datalist>
+
+            <button type="submit">Cerca</button>
+        </form>
+    </div>
+
+    <div class="no-recipes" th:if="${recipes != null and recipes.isEmpty()}">
+        <p>Nessuna ricetta trovata.</p>
+        <a href="/recipes" class="btn-secondary">Mostra tutte</a>
+    </div>
+
+    <section class="recipes">
+
+        <div class="recipe-card" th:each="recipe : ${recipes}">
+            <a th:href="@{'/recipes/' + ${recipe.id}}">
+
+                <img class="recipe-image"
+                     th:if="${recipe.images != null and !recipe.images.isEmpty()}"
+                     th:src="${recipe.images[0].path}"
+                     alt="Immagine ricetta">
+
+                <img class="recipe-image"
+                     th:if="${recipe.images == null or recipe.images.isEmpty()}"
+                     src="/images/recipe-placeholder.png"
+                     alt="Nessuna immagine">
+
+                <div class="recipe-info">
+                    <h2 th:text="${recipe.title}">Nome ricetta</h2>
+                    <p th:text="${recipe.description}">Descrizione breve</p>
+                </div>
+
+            </a>
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>

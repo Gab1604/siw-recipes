@@ -1,72 +1,105 @@
-
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrazione - SIW Recipes</title>
+
+    <link rel="stylesheet" href="/css/base.css">
     <link rel="stylesheet" href="/css/register.css">
-    <title>Registrazione</title>
 </head>
+
 <body>
-    <header class="navbar">
-        <div class="logo">
-            <img src="/images/logo_siw_books.png" alt="Logo SIW Books">
-        </div>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/login">Login</a></li>
-            </ul>
-        </nav>
-    </header>
-    <div class="content" >
-        <h1>Registrati a SIW Books</h1>
+
+<header class="navbar">
+    <div class="logo">
+        <a href="/">
+            <img src="/images/logo_siw_recipes.png" alt="Logo SIW Recipes">
+        </a>
+    </div>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/login">Accedi</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="register-page">
+    
+    <main class="content">
+
+        <h1>Registrati a SIW Recipes</h1>
+
         <div class="form-box">
-            <form th:action="@{/register}" method="POST">
-                <div class="input-group" th:object="${user}">
-                    <label for="name">Nome:</label>
-                    <span><input type="text" id="name" placeholder="name" required th:field="*{name}" /></span>
-                    <span th:if="${#fields.hasErrors('name')}" class="error-message">
-                        <p th:errors="*{name}">Nome non valido</p></span>
+            <form th:action="@{/register}" method="POST" th:object="${user}">
+
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Nome</label>
+                        <input type="text" placeholder="Nome" required th:field="*{name}" />
+                        <span th:if="${#fields.hasErrors('name')}" class="error-message">
+                            <p th:errors="*{name}">Errore Nome</p>
+                        </span>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Cognome</label>
+                        <input type="text" placeholder="Cognome" required th:field="*{surname}" />
+                        <span th:if="${#fields.hasErrors('surname')}" class="error-message">
+                            <p th:errors="*{surname}">Errore Cognome</p>
+                        </span>
+                    </div>
                 </div>
-                <div class="input-group" th:object="${user}">
-                    <label for="surname">Cognome:</label>
-                    <span><input type="text" id="surname" placeholder="surname" required th:field="*{surname}" /></span>
-                    <span th:if="${#fields.hasErrors('surname')}" class="error-message">
-                        <p th:errors="*{surname}">Cognome non valido</p></span>
-                </div>
-                <div class="input-group" th:object="${user}">
-                    <label for="email">Email:</label>
-                    <span><input type="email" id="email" placeholder="email" required th:field="*{email}" /></span>
+
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="esempio@email.com" required th:field="*{email}" />
                     <span th:if="${#fields.hasErrors('email')}" class="error-message">
-                        <p th:errors="*{email}">Email non valida</p></span>
+                        <p th:errors="*{email}">Errore Email</p>
+                    </span>
                 </div>
-                <div class="input-group" th:object="${user}">
-                    <label for="birthDate">Data di Nascita:</label>
-                    <span><input type="date" id="birth" placeholder="birth" required th:field="*{birth}" th:attr="max=${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}" /></span>
+
+                <div class="input-group">
+                    <label>Data di nascita</label>
+                    <input type="date" required th:field="*{birth}"
+                           th:attr="max=${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}" />
                     <span th:if="${#fields.hasErrors('birth')}" class="error-message">
-                        <p th:errors="*{birth}">Data di nascita non valida</p></span>
+                        <p th:errors="*{birth}">Errore Data</p>
+                    </span>
                 </div>
-                <div class="input-group">
-                    <label for="username">Username:</label>
-                    <span><input type="text" id="username" placeholder="username" required th:field="*{credentials.username}" /></span>
-                    <span th:if="${#fields.hasErrors('credentials.username')}" class="error-message">
-                        <p th:errors="*{credentials.username}">Username non valido</p></span>
+
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Username</label>
+                        <input type="text" placeholder="Scegli username" required th:field="*{credentials.username}" />
+                        <span th:if="${#fields.hasErrors('credentials.username')}" class="error-message">
+                            <p th:errors="*{credentials.username}">Errore Username</p>
+                        </span>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" placeholder="Scegli password" required th:field="*{credentials.password}" />
+                        <span th:if="${#fields.hasErrors('credentials.password')}" class="error-message">
+                            <p th:errors="*{credentials.password}">Errore Password</p>
+                        </span>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="password">Password:</label>
-                    <span><input type="password" id="password" placeholder="password" required th:field="*{credentials.password}" /></span>
-                    <span th:if="${#fields.hasErrors('credentials.password')}" class="error-message">
-                        <p th:errors="*{credentials.password}">Password non valida</p></span>
-                </div>
+
                 <button type="submit">Registrati</button>
+
             </form>
         </div>
-    </div>
-    <div class="container-login">
-        <h2>Hai già un account?</h2>
-        <p>Accedi per continuare a esplorare SIW Books.</p>
-        <button class="register-btn" onclick="location.href='/login'">Accedi</button>
-    </div>
+
+        <div class="container-login">
+            <h2>Hai già un account?</h2>
+            <p>Accedi per continuare a esplorare SIW Recipes.</p>
+            <a href="/login">Accedi</a>
+        </div>
+
+    </main>
+</div>
+
 </body>
 </html>

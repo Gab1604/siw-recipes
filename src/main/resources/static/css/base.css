@@ -1,0 +1,379 @@
+/* ==============================
+   RESET & BASE
+   ============================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #fafafa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* ==============================
+   TYPOGRAPHY
+   ============================== */
+
+h1, h2, h3 {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #2c2c2c;
+    font-weight: 700;
+}
+
+h1 {
+    font-size: 2.6rem;
+    margin-bottom: 14px;
+    letter-spacing: -0.5px;
+}
+
+h2 {
+    font-size: 1.8rem;
+    letter-spacing: -0.3px;
+}
+
+h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+/* ==============================
+   NAVBAR
+   ============================== */
+
+.navbar {
+    background-color: #ffffff;
+    border-bottom: 2px solid #d4350c;
+    padding: 16px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo img {
+    height: 48px;
+    transition: transform 0.2s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.05);
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 32px;
+    align-items: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: color 0.2s ease;
+    position: relative;
+    padding: 8px 4px;
+}
+
+.nav-links a:hover {
+    color: #d4350c;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #d4350c;
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* ==============================
+   LAYOUT
+   ============================== */
+
+.content {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 0 24px;
+}
+
+.section {
+    margin-bottom: 50px;
+}
+
+/* ==============================
+   BUTTONS
+   ============================== */
+
+button,
+.link-button,
+.action-btn {
+    background-color: #d4350c;
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(212, 53, 12, 0.2);
+}
+
+button:hover,
+.link-button:hover,
+.action-btn:hover {
+    background-color: #b92d0a;
+    box-shadow: 0 4px 12px rgba(212, 53, 12, 0.3);
+    transform: translateY(-2px);
+}
+
+button:active,
+.link-button:active,
+.action-btn:active {
+    transform: translateY(0);
+}
+
+/* Variante secondaria */
+.btn-secondary {
+    background-color: #ffffff;
+    color: #d4350c;
+    border: 2px solid #d4350c;
+    box-shadow: none;
+}
+
+.btn-secondary:hover {
+    background-color: #d4350c;
+    color: #ffffff;
+}
+
+/* Link che sembrano bottoni */
+.link-button {
+    text-decoration: none;
+    display: inline-block;
+}
+
+/* ==============================
+   FORMS (base)
+   ============================== */
+
+.form-box {
+    background-color: #ffffff;
+    padding: 36px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f5e8e0;
+}
+
+.input-group {
+    margin-bottom: 22px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    color: #2c2c2c;
+}
+
+.input-group input,
+.input-group textarea,
+.input-group select {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.input-group input:focus,
+.input-group textarea:focus,
+.input-group select:focus {
+    outline: none;
+    border-color: #d4350c;
+    box-shadow: 0 0 0 3px rgba(212, 53, 12, 0.1);
+}
+
+.input-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* ==============================
+   ERROR & INFO
+   ============================== */
+
+.error-message {
+    color: #d4350c;
+    font-size: 0.9rem;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.success-message {
+    color: #27ae60;
+    font-size: 0.9rem;
+    margin-top: 6px;
+    padding: 12px;
+    background-color: #d5f4e6;
+    border-radius: 6px;
+    border-left: 3px solid #27ae60;
+}
+
+.info-message {
+    color: #2980b9;
+    font-size: 0.9rem;
+    margin-top: 6px;
+    padding: 12px;
+    background-color: #d6eaf8;
+    border-radius: 6px;
+    border-left: 3px solid #2980b9;
+}
+
+/* ==============================
+   TABLES (admin)
+   ============================== */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 24px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+table th,
+table td {
+    border: 1px solid #e8e8e8;
+    padding: 14px 16px;
+    text-align: left;
+}
+
+table th {
+    background-color: #fef9f3;
+    font-weight: 600;
+    color: #2c2c2c;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+table tr:hover {
+    background-color: #fef9f3;
+}
+
+table td {
+    font-size: 0.95rem;
+}
+
+/* ==============================
+   UTILITY
+   ============================== */
+
+.inline-form {
+    display: inline;
+}
+
+.image-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.image-preview img {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.image-preview img:hover {
+    transform: scale(1.05);
+}
+
+/* Card generica */
+.card {
+    background-color: #ffffff;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f5f5f5;
+}
+
+/* Separatore */
+.divider {
+    height: 2px;
+    background: linear-gradient(to right, transparent, #d4350c, transparent);
+    margin: 40px 0;
+}
+
+/* ==============================
+   RESPONSIVE
+   ============================== */
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 14px 20px;
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .nav-links {
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .nav-links a {
+        font-size: 0.9rem;
+    }
+    
+    .content {
+        margin: 30px auto;
+        padding: 0 16px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    .form-box {
+        padding: 24px;
+    }
+    
+    table {
+        font-size: 0.85rem;
+    }
+    
+    table th,
+    table td {
+        padding: 10px 12px;
+    }
+}

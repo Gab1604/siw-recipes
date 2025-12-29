@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ricette Disponibili</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/recipes.css">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">
+        <a href="/indexUser">
+            <img src="/images/logo_siw_recipes.png" alt="Logo">
+        </a>
+    </div>
+    <nav>
+        <ul class="nav-links">
+            <li><a href="/indexUser">Home</a></li>
+            <li><a href="/user/recipes">Ricette</a></li>
+            <li><a href="/user/account">Account</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="content">
+
+    <h1 class="page-title">Esplora le Ricette</h1>
+
+    <div class="recipes-filters">
+        <form th:action="@{/user/recipes/search}" method="get">
+            <input type="search" name="query" placeholder="Cerca..." required>
+            <button type="submit">Cerca</button>
+        </form>
+    </div>
+
+    <div class="no-recipes" th:if="${recipes == null or recipes.isEmpty()}">
+        <p>Non ci sono ricette disponibili.</p>
+        <a href="/user/recipes" class="btn-secondary">Ricarica</a>
+    </div>
+
+    <section class="recipes">
+
+        <div class="recipe-card" th:each="recipe : ${recipes}">
+            <a th:href="@{'/user/recipes/' + ${recipe.id}}">
+
+                <!-- IMMAGINE -->
+                <img class="recipe-image"
+                     th:if="${recipe.images != null and !recipe.images.isEmpty()}"
+                     th:src="${recipe.images[0].path}"
+                     alt="Foto">
+
+                <img class="recipe-image"
+                     th:if="${recipe.images == null or recipe.images.isEmpty()}"
+                     src="/images/recipe-placeholder.png"
+                     alt="Placeholder">
+
+                <div class="recipe-info">
+                    <h2 th:text="${recipe.title}">Titolo</h2>
+                    <p th:text="${recipe.description}">Descrizione...</p>
+                </div>
+
+            </a>
+        </div>
+
+    </section>
+
+</main>
+</body>
+</html>

@@ -1,4 +1,3 @@
-
 package it.uniroma3.siw.model;
 
 import jakarta.persistence.*;
@@ -12,7 +11,7 @@ public class Review {
     private Long id;
 
     @NotBlank(message = "Il titolo non può essere vuoto")
-    private String title; // 🆕 Campo aggiunto per il titolo della recensione
+    private String title;
 
     @NotBlank(message = "Il testo della recensione non può essere vuoto")
     @Column(columnDefinition = "TEXT")
@@ -23,8 +22,8 @@ public class Review {
     private int rating;
 
     @ManyToOne
-    @JoinColumn(name = "book_id")
-    private Book book;
+    @JoinColumn(name = "recipe_id")
+    private Recipe recipe;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -32,8 +31,6 @@ public class Review {
 
     // Costruttore vuoto
     public Review() {}
-
-    // Getter e Setter
 
     public Long getId() {
         return id;
@@ -67,12 +64,12 @@ public class Review {
         this.rating = rating;
     }
 
-    public Book getBook() {
-        return book;
+    public Recipe getRecipe() {
+        return recipe;
     }
 
-    public void setBook(Book book) {
-        this.book = book;
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 
     public User getUser() {

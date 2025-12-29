@@ -63,6 +63,6 @@ public class ImageStorageService {
         }
 
         // Restituisce il percorso relativo
-        return subdir + "/" + filename;
+       return "/uploads/" + subdir + "/" + filename;
     }
 }
