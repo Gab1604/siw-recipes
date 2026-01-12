@@ -24,16 +24,17 @@ public class AuthConfiguration {
     @Autowired
     private DataSource dataSource;
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth)
-            throws Exception {
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .authoritiesByUsernameQuery(
-                        "SELECT username, role FROM credentials WHERE username=?")
-                .usersByUsernameQuery(
-                        "SELECT username, password, 1 as enabled FROM credentials WHERE username=?");
-    }
+@Autowired
+public void configureGlobal(AuthenticationManagerBuilder auth)
+        throws Exception {
+    auth.jdbcAuthentication()
+            .dataSource(dataSource)
+            .passwordEncoder(passwordEncoder())   // <<< QUESTA RIGA È LA CHIAVE
+            .authoritiesByUsernameQuery(
+                    "SELECT username, role FROM credentials WHERE username=?")
+            .usersByUsernameQuery(
+                    "SELECT username, password, 1 as enabled FROM credentials WHERE username=?");
+}
 
     @Bean
     PasswordEncoder passwordEncoder() {
