@@ -85,7 +85,9 @@
 
             <small class="review-author">
                 di
-                <span th:text="${review.user.credentials.username}">
+                <span th:text="${review.user != null and review.user.credentials != null
+                               ? review.user.credentials.username
+                               : 'Utente'}">
                     username
                 </span>
             </small>

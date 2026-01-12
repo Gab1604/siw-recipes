@@ -26,9 +26,9 @@ public class User {
 
     private LocalDate birth;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "credentials_id")
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
     private Credentials credentials;
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> review;
