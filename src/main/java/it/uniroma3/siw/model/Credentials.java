@@ -16,7 +16,7 @@ public class Credentials {
     private String password;
     private String role;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST) // 🔥 ROBUSTO
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -30,12 +30,12 @@ public class Credentials {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

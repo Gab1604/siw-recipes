@@ -3,8 +3,6 @@ package it.uniroma3.siw.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,23 +27,18 @@ public class CredentialsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
     /* =======================
        CRUD
        ======================= */
 
     @Transactional
     public Credentials getCredentials(Long id) {
-        Optional<Credentials> result = credentialsRepository.findById(id);
-        return result.orElse(null);
+        return credentialsRepository.findById(id).orElse(null);
     }
 
     @Transactional
     public Credentials getCredentials(String username) {
-        Optional<Credentials> result = credentialsRepository.findByUsername(username);
-        return result.orElse(null);
+        return credentialsRepository.findByUsername(username).orElse(null);
     }
 
     @Transactional
@@ -100,17 +93,5 @@ public class CredentialsService {
             return this.getCredentials(userDetails.getUsername());
         }
         return null;
-    }
-
-    /* =======================
-       AUTO LOGIN
-       ======================= */
-
-    public void autoLogin(String username, String password) {
-        UsernamePasswordAuthenticationToken token =
-                new UsernamePasswordAuthenticationToken(username, password);
-
-        Authentication auth = authenticationManager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(auth);
     }
 }

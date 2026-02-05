@@ -21,10 +21,6 @@ public class AdminController {
     @Autowired
     private CredentialsService credentialsService;
 
-    public AdminController(UserService userService) {
-        this.userService = userService;
-    }
-
     /* =======================
        ACCOUNT ADMIN
        ======================= */
@@ -40,7 +36,9 @@ public class AdminController {
         model.addAttribute("credentials", credentials);
 
         if (Credentials.ADMIN_ROLE.equals(credentials.getRole())) {
-            List<Credentials> utenti = (List<Credentials>) credentialsService.findAll();
+            List<Credentials> utenti =
+                    (List<Credentials>) credentialsService.findAll();
+
             // rimuove l'admin corrente dalla lista
             utenti.removeIf(c -> c.getId().equals(credentials.getId()));
             model.addAttribute("utenti", utenti);
@@ -52,6 +50,9 @@ public class AdminController {
     @GetMapping("/modificaAccount")
     public String getModificaAccount(Model model) {
         Credentials credentials = credentialsService.getCurrentCredentials();
+        if (credentials == null) {
+            return "redirect:/login";
+        }
         model.addAttribute("credentials", credentials);
         return "admin/adminModificaAccount";
     }
@@ -70,12 +71,7 @@ public class AdminController {
         userService.updateUser(updatedCredentials.getUser());
         credentialsService.updateCredentials(updatedCredentials);
 
-        // riautentica l'admin con le nuove credenziali
-        credentialsService.autoLogin(
-                updatedCredentials.getUsername(),
-                updatedCredentials.getPassword()
-        );
-
+        // ⚠️ niente auto-login (logout/login manuale se cambia password)
         return "redirect:/admin/account";
     }
 
@@ -104,7 +100,7 @@ public class AdminController {
     public String deleteUser(@PathVariable("id") Long id, Model model) {
         Credentials credentials = credentialsService.getCredentials(id);
 
-        // controllo null-safe + solo USER eliminabili
+        // solo utenti USER eliminabili
         if (credentials == null ||
             !Credentials.DEFAULT_ROLE.equals(credentials.getRole())) {
             model.addAttribute("error", "Utente non trovato o non eliminabile");

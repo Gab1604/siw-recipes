@@ -29,13 +29,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    /* ===== ACCOUNT ===== */
+    /* =======================
+       ACCOUNT
+       ======================= */
 
     @GetMapping("/account")
     public String getAccount(Model model) {
         Credentials credentials = credentialsService.getCurrentCredentials();
         if (credentials == null) {
-            return "user/indexUser";
+            return "redirect:/login";
         }
         model.addAttribute("credentials", credentials);
         return "user/userAccount";
@@ -44,19 +46,31 @@ public class UserController {
     @GetMapping("/modificaAccount")
     public String getModificaAccount(Model model) {
         Credentials credentials = credentialsService.getCurrentCredentials();
+        if (credentials == null) {
+            return "redirect:/login";
+        }
         model.addAttribute("credentials", credentials);
         return "user/userModificaAccount";
     }
 
     @PostMapping("/account")
-    public String updateAccount(@ModelAttribute("credentials") Credentials updatedCredentials, Model model) {
+    public String updateAccount(
+            @ModelAttribute("credentials") Credentials updatedCredentials) {
+
         Credentials currentCredentials = credentialsService.getCurrentCredentials();
-        if (currentCredentials == null || !updatedCredentials.getId().equals(currentCredentials.getId())) {
+
+        if (currentCredentials == null ||
+            !updatedCredentials.getId().equals(currentCredentials.getId())) {
             return "redirect:/user/account";
         }
+
+        // aggiorna dati utente
         userService.updateUser(updatedCredentials.getUser());
+
+        // aggiorna credenziali (username / password)
         credentialsService.updateCredentials(updatedCredentials);
-        credentialsService.autoLogin(updatedCredentials.getUsername(), updatedCredentials.getPassword());
+
+        // ⚠️ niente auto-login (logout/login manuale se cambia password)
         return "redirect:/user/account";
     }
 
@@ -70,7 +84,9 @@ public class UserController {
         return "error";
     }
 
-    /* ===== RICETTE ===== */
+    /* =======================
+       RICETTE
+       ======================= */
 
     @GetMapping("/recipes")
     public String showUserRecipes(Model model) {
@@ -84,6 +100,7 @@ public class UserController {
         if (optionalRecipe.isEmpty()) {
             return "redirect:/user/recipes";
         }
+
         Recipe recipe = optionalRecipe.get();
         model.addAttribute("recipe", recipe);
         model.addAttribute("reviews", reviewService.findByRecipe(recipe));
@@ -96,6 +113,7 @@ public class UserController {
         if (optionalRecipe.isEmpty()) {
             return "redirect:/user/recipes";
         }
+
         model.addAttribute("recipe", optionalRecipe.get());
         model.addAttribute("review", new Review());
         return "user/newFormReview";
@@ -127,11 +145,16 @@ public class UserController {
 
         User loggedUser = credentials.getUser();
 
-        Review existingReview = reviewService.findByUserAndRecipe(loggedUser, recipe);
+        Review existingReview =
+                reviewService.findByUserAndRecipe(loggedUser, recipe);
+
         if (existingReview != null) {
             model.addAttribute("recipe", recipe);
             model.addAttribute("review", review);
-            model.addAttribute("errorMessage", "Hai già inserito una recensione per questa ricetta.");
+            model.addAttribute(
+                "errorMessage",
+                "Hai già inserito una recensione per questa ricetta."
+            );
             return "user/newFormReview";
         }
 
@@ -145,7 +168,8 @@ public class UserController {
 
     @GetMapping("/recipes/search")
     public String searchRecipes(@RequestParam("query") String query, Model model) {
-        List<Recipe> recipes = recipeService.findByTitleContainingIgnoreCase(query);
+        List<Recipe> recipes =
+                recipeService.findByTitleContainingIgnoreCase(query);
         model.addAttribute("recipes", recipes);
         return "user/userRecipes";
     }

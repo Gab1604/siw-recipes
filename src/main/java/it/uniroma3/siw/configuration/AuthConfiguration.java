@@ -1,5 +1,10 @@
 package it.uniroma3.siw.configuration;
 
+import static it.uniroma3.siw.model.Credentials.ADMIN_ROLE;
+import static it.uniroma3.siw.model.Credentials.DEFAULT_ROLE;
+
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static it.uniroma3.siw.model.Credentials.ADMIN_ROLE;
-
-import javax.sql.DataSource;
-
 @Configuration
 @EnableWebSecurity
 public class AuthConfiguration {
@@ -24,60 +25,82 @@ public class AuthConfiguration {
     @Autowired
     private DataSource dataSource;
 
-@Autowired
-public void configureGlobal(AuthenticationManagerBuilder auth)
-        throws Exception {
-    auth.jdbcAuthentication()
+    /* ============================
+       AUTHENTICATION (JDBC)
+       ============================ */
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+            .jdbcAuthentication()
             .dataSource(dataSource)
-            .passwordEncoder(passwordEncoder())   // <<< QUESTA RIGA È LA CHIAVE
-            .authoritiesByUsernameQuery(
-                    "SELECT username, role FROM credentials WHERE username=?")
             .usersByUsernameQuery(
-                    "SELECT username, password, 1 as enabled FROM credentials WHERE username=?");
-}
+                "SELECT username, password, true FROM credentials WHERE username=?"
+            )
+            .authoritiesByUsernameQuery(
+                "SELECT username, role FROM credentials WHERE username=?"
+            )
+            .passwordEncoder(passwordEncoder());
+    }
 
+    /* ============================
+       PASSWORD ENCODER
+       ============================ */
     @Bean
-    PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /* ============================
+       AUTHENTICATION MANAGER
+       ============================ */
     @Bean
-    AuthenticationManager authenticationManager(
-            AuthenticationConfiguration authenticationConfiguration)
-            throws Exception {
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    /* ============================
+       SECURITY FILTER CHAIN
+       ============================ */
     @Bean
-    SecurityFilterChain configure(final HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        httpSecurity
+        http
             .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                        HttpMethod.GET,
-                        "/", "/index", "/register", "/login",
-                        "/book/**", "/author/**",
-                        "/css/**", "/images/**", "/uploads/**"
-                ).permitAll()
-                .requestMatchers(HttpMethod.POST, "/register", "/login")
-                .permitAll()
-                .requestMatchers(HttpMethod.GET, "/admin/**")
-                .hasAnyAuthority(ADMIN_ROLE)
-                .requestMatchers(HttpMethod.POST, "/admin/**")
-                .hasAnyAuthority(ADMIN_ROLE)
-                .requestMatchers(HttpMethod.GET, "/user/**")
-                .hasAuthority("DEFAULT")
-                .requestMatchers(HttpMethod.POST, "/user/**")
-                .hasAuthority("DEFAULT")
 
+            .authorizeHttpRequests(auth -> auth
+
+                /* ===== PUBBLICO ===== */
+                .requestMatchers(
+                        "/",
+                        "/login",
+                        "/register",
+                        "/css/**",
+                        "/images/**",
+                        "/uploads/**",
+                        "/book/**",
+                        "/author/**"
+                ).permitAll()
+
+                /* ===== ADMIN ===== */
+                .requestMatchers("/admin/**")
+                .hasAuthority(ADMIN_ROLE)
+
+                /* ===== USER ===== */
+                .requestMatchers("/user/**")
+                .hasAuthority(DEFAULT_ROLE)
+
+                /* ===== TUTTO IL RESTO ===== */
                 .anyRequest().authenticated()
             )
+
             .formLogin(form -> form
                 .loginPage("/login")
                 .successHandler((request, response, authentication) -> {
+
                     boolean isAdmin = authentication.getAuthorities().stream()
                             .anyMatch(a -> a.getAuthority().equals(ADMIN_ROLE));
+
                     if (isAdmin) {
                         response.sendRedirect("/indexAdmin");
                     } else {
@@ -87,6 +110,7 @@ public void configureGlobal(AuthenticationManagerBuilder auth)
                 .failureUrl("/login?error=true")
                 .permitAll()
             )
+
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
@@ -96,6 +120,6 @@ public void configureGlobal(AuthenticationManagerBuilder auth)
                 .permitAll()
             );
 
-        return httpSecurity.build();
+        return http.build();
     }
 }

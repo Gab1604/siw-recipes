@@ -28,7 +28,7 @@ public class AuthenticationController {
     private RecipeService recipeService;
 
     /* =====================
-       LOGIN / REGISTER
+       LOGIN
        ===================== */
 
     @GetMapping("/login")
@@ -40,30 +40,37 @@ public class AuthenticationController {
         return "login";
     }
 
+    /* =====================
+       REGISTER
+       ===================== */
+
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (!(auth instanceof AnonymousAuthenticationToken)) {
             return "redirect:/";
         }
-        model.addAttribute("user", new User());
-        model.addAttribute("credentials", new Credentials());
+
+        User user = new User();
+        user.setCredentials(new Credentials());
+
+        model.addAttribute("user", user);
         return "register";
     }
 
     @PostMapping("/register")
     public String registerUser(
             @Valid @ModelAttribute("user") User user,
-            BindingResult userBindingResult,
-            @Valid @ModelAttribute("credentials") Credentials credentials,
-            BindingResult credentialsBindingResult) {
+            BindingResult bindingResult) {
 
-        if (userBindingResult.hasErrors() || credentialsBindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "register";
         }
 
+        Credentials credentials = user.getCredentials();
         credentials.setUser(user);
-        user.setCredentials(credentials);
+        credentials.setRole(Credentials.DEFAULT_ROLE);
+
         credentialsService.saveCredentials(credentials);
 
         return "redirect:/login";
@@ -88,7 +95,7 @@ public class AuthenticationController {
         Credentials credentials =
                 credentialsService.getCredentials(userDetails.getUsername());
 
-        if (credentials.getRole().equals(Credentials.ADMIN_ROLE)) {
+        if (Credentials.ADMIN_ROLE.equals(credentials.getRole())) {
             return "admin/indexAdmin";
         }
 
@@ -96,7 +103,7 @@ public class AuthenticationController {
     }
 
     /* =====================
-       HOME UTENTE
+       HOME USER
        ===================== */
 
     @GetMapping("/indexUser")
