@@ -1,6 +1,5 @@
 package it.uniroma3.siw.model;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -23,8 +22,6 @@ public class User {
 
     @NotBlank
     private String email;
-
-    private LocalDate birth;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
     private Credentials credentials;
@@ -65,14 +62,6 @@ public class User {
     
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public LocalDate getBirth() {
-        return birth;
-    }
-    
-    public void setBirth(LocalDate birth) {
-        this.birth = birth;
     }
 
     public Credentials getCredentials() {

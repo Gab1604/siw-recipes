@@ -60,15 +60,7 @@
                     </span>
                 </div>
 
-                <div class="input-group">
-                    <label>Data di nascita</label>
-                    <input type="date" required th:field="*{birth}"
-                           th:attr="max=${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}" />
-                    <span th:if="${#fields.hasErrors('birth')}" class="error-message">
-                        <p th:errors="*{birth}">Errore Data</p>
-                    </span>
-                </div>
-
+                
                 <div class="form-row">
                     <div class="input-group">
                         <label>Username</label>

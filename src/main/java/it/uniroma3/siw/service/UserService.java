@@ -78,8 +78,7 @@ public class UserService {
         existingUser.setName(user.getName());
         existingUser.setSurname(user.getSurname());
         existingUser.setEmail(user.getEmail());
-        existingUser.setBirth(user.getBirth());
-
+        
         userRepository.save(existingUser);
 
     }

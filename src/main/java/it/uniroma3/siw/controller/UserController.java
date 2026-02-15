@@ -94,6 +94,21 @@ public class UserController {
         return "user/userRecipes";
     }
 
+    
+@GetMapping("/recipes/category/{category}")
+public String recipesByCategoryUser(@PathVariable String category, Model model) {
+
+    category = category.replace("-", " ");
+
+    List<Recipe> recipes = recipeService.findByCategory(category);
+
+    model.addAttribute("recipes", recipes);
+    model.addAttribute("selectedCategory", category);
+
+    return "user/userRecipes";
+}
+
+
     @GetMapping("/recipes/{id}")
     public String getRecipe(@PathVariable Long id, Model model) {
         Optional<Recipe> optionalRecipe = recipeService.findById(id);

@@ -41,6 +41,14 @@
 
         <h1 th:text="${recipe.title}">Nome Ricetta</h1>
 
+<p th:if="${recipe.category != null}">
+    <strong>Categoria:</strong>
+    <a th:href="@{'/recipes/category/' + ${#strings.replace(recipe.category,' ','-')}}"
+       th:text="${recipe.category}">
+    </a>
+</p>
+
+
         <!-- Badge ADMIN -->
         <div sec:authorize="hasAuthority('ADMIN')">
             <span class="badge-admin">ADMIN</span>

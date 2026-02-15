@@ -49,6 +49,21 @@ public class RecipeController {
         return "recipe";
     }
 
+    @GetMapping("/recipes/category/{category}")
+public String recipesByCategory(@PathVariable String category, Model model) {
+
+    // Se nell'URL abbiamo trattini al posto degli spazi
+    category = category.replace("-", " ");
+
+    List<Recipe> recipes = recipeService.findByCategory(category);
+
+    model.addAttribute("recipes", recipes);
+    model.addAttribute("selectedCategory", category);
+
+    return "recipes";
+}
+
+
     /* =======================
        RICERCA
        ======================= */

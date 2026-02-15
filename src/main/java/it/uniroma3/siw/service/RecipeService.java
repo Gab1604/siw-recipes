@@ -43,6 +43,11 @@ public class RecipeService {
         return (List<Recipe>) recipeRepository.findAllById(ids);
     }
 
+    public List<Recipe> findByCategory(String category) {
+    return this.recipeRepository.findByCategory(category);
+}
+
+
     public void deleteById(Long id) {
         recipeRepository.deleteById(id);
     }

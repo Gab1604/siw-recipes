@@ -9,4 +9,6 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long> {
     List<Recipe> findByTitleContainingIgnoreCase(String title);
 
     List<Recipe> findTop6ByOrderByIdDesc();
+
+    List<Recipe> findByCategory(String category);
 }

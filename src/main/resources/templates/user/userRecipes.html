@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ricette Disponibili</title>
+
     <link rel="stylesheet" href="/css/base.css">
     <link rel="stylesheet" href="/css/recipes.css">
 </head>
@@ -44,19 +45,16 @@
 
     <section class="recipes">
 
-        <div class="recipe-card" th:each="recipe : ${recipes}">
+        <div class="recipe-card"
+             th:each="recipe : ${recipes}">
+
             <a th:href="@{'/user/recipes/' + ${recipe.id}}">
 
-                <!-- IMMAGINE -->
+                <!-- IMMAGINE: sicura, niente icone rotte -->
                 <img class="recipe-image"
-                     th:if="${recipe.images != null and !recipe.images.isEmpty()}"
                      th:src="${recipe.images[0].path}"
-                     alt="Foto">
-
-                <img class="recipe-image"
-                     th:if="${recipe.images == null or recipe.images.isEmpty()}"
-                     src="/images/recipe-placeholder.png"
-                     alt="Placeholder">
+                     alt=""
+                     onerror="this.style.display='none'">
 
                 <div class="recipe-info">
                     <h2 th:text="${recipe.title}">Titolo</h2>
@@ -69,5 +67,6 @@
     </section>
 
 </main>
+
 </body>
 </html>

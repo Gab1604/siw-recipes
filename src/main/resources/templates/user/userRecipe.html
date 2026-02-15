@@ -33,6 +33,14 @@
 
     <h1 th:text="${recipe.title}">Nome Ricetta</h1>
 
+<p th:if="${recipe.category != null}">
+    <strong>Categoria:</strong>
+    <a th:href="@{'/user/recipes/category/' + ${#strings.replace(recipe.category,' ','-')}}"
+       th:text="${recipe.category}">
+    </a>
+</p>
+
+
     <!-- IMMAGINE -->
     <img class="recipe-main-image"
          th:if="${recipe.images != null and !recipe.images.isEmpty()}"
